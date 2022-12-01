@@ -1,0 +1,49 @@
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      My Schedules
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select schedule to go to your attendance
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="height:100%; overflow-y:auto">
+      <div style="min-height: 6px;">
+        <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
+      </div>
+    <mat-grid-list cols="4" rowHeight="150" >
+      <mat-grid-tile *ngFor="let schedule of observableData | async">
+        <app-selector-card [icon]="!schedule.IsPublish ? 'star' : ''">
+          <div title>
+            {{schedule.Name}}
+          </div>
+          <div subtitle>
+            {{schedule.StartDate | date:'EEE dd/MM/yyyy'}} - {{schedule.EndDate | date:'EEE dd/MM/yyyy'}}
+          </div>
+          <div overlayContents style="height:100%">
+            <mat-grid-list [cols]="(isHos | async) ? 2 : 1" rowHeight="fit" style="height:100%">
+              <mat-grid-tile>
+                <button mat-raised-button class="growing" color='primary'
+                [routerLink]="['/schedule-details/daily-attendance/',schedule.Id]"
+                matTooltip="Daily Attendance">
+                  <mat-icon>event_available</mat-icon> Me
+                </button>
+              </mat-grid-tile>
+              <mat-grid-tile *ngIf="(isHos | async)">
+                <button mat-raised-button class="growing" color='accent'
+                [routerLink]="['/schedule-details/daily-attendance/all/',schedule.Id]"
+                matTooltip="Daily Attendance">
+                  <mat-icon>event_available</mat-icon> All
+                </button>
+              </mat-grid-tile>
+
+            </mat-grid-list>
+          </div>
+        </app-selector-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  </mat-card-content>
+</mat-card>
+

@@ -1,0 +1,9 @@
+<div class="interval-div"
+            unselectable="on"
+            [ngClass]="isLoading ? 'shake' : ''"
+            [ngClass]="isSelected ? 'detail-selected' : ''"
+            [ngStyle]="{'background-color':scheduleDetail?.ActivityColor}"
+            [matTooltip]="scheduleDetail? scheduleDetail.ActivityName : ''"
+            (mousedown)="onMouseDown($event)"
+            (mouseenter)="isMouseDown ? onMouseEnter() : ''"
+>{{scheduleDetail?.Duration}}</div>

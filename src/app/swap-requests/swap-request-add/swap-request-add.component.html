@@ -1,0 +1,85 @@
+<button mat-stroked-button class="float-top-right" color="primary" [routerLink]="'/swap-requests'">
+  Back To My Requests
+</button>
+<form *ngIf="frm" [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-container">
+    <mat-card-header>
+      <mat-card-title>
+       Add New Swap Request
+       <mat-icon *ngIf="frm.disabled" color="accent">
+        done_all
+       </mat-icon>
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill required fields
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>
+                Select Schedule
+              </mat-label>
+              <mat-select formControlName="ScheduleId">
+                <mat-option *ngFor="let schedule of (mySchedules | async)" [value]="schedule.Id">
+                  {{schedule.Name}}
+                </mat-option>
+              </mat-select>
+              <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingMySchedules | async"></mat-spinner>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>
+                I want to attend on
+              </mat-label>
+              <mat-select formControlName="SourceDailyAttendanceId">
+                <mat-option *ngFor="let dayOff of (myDayOffs | async)?.DailyAttendances" [value]="dayOff.Id">
+                  {{dayOff.Day | date: 'EEE dd/MM/yyyy'}}
+                </mat-option>
+              </mat-select>
+              <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingMyDayOffs | async"></mat-spinner>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>
+                Responder
+              </mat-label>
+              <mat-select formControlName="Responder">
+                <mat-option *ngFor="let staff of (mySiblings | async)" [value]="staff.Id">
+                  {{staff.Name}}
+                </mat-option>
+              </mat-select>
+              <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingMySiblings | async"></mat-spinner>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>
+                Responder Day-Off
+              </mat-label>
+              <mat-select formControlName="DestinationDailyAttendanceId">
+                <mat-option *ngFor="let day of destinationDayOffs" [value]="day.Id">
+                  {{day.Day | date : 'EEE dd/MM/yyyy'}}
+                </mat-option>
+              </mat-select>
+              <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingDestination | async"></mat-spinner>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="frm.invalid || frm.disabled || (isAdding | async)">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

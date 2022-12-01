@@ -1,0 +1,154 @@
+<button mat-stroked-button class="float-top-right" color="primary" [routerLink]="'/schedules'">
+  Back To Schedules
+</button>
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
+
+<form *ngIf="schedule" [formGroup]="frm" (ngSubmit)="generate()">
+<mat-card class="full-container" >
+  <mat-card-header>
+    <mat-card-title>
+      Generating Schedule: {{schedule.Schedule.Name}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{schedule.Schedule.StartDate | date:'dd/MM/yyyy'}} - {{schedule.Schedule.EndDate | date:'dd/MM/yyyy'}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-grid-list cols="2" rowHeight="100">
+      <mat-grid-tile>
+        <mat-form-field style="min-width:70%">
+          <mat-label>
+            Selected Forecast
+          </mat-label>
+          <mat-select formControlName="forecastId">
+            <mat-option *ngFor="let forecast of forecasts | async" [value]="forecast.Id">
+              {{forecast.Name}} <small>{{forecast.StartDate | date: 'dd/MM/yyyy'}}-{{forecast.EndDate | date:'dd/MM/yyyy'}}</small>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <h2 class="mat-h2" *ngIf="schedule?.AttendanceStaffCount! > 0; else noAttendance">
+          <span class="primary-text">{{schedule.AttendanceStaffCount | number}} Members are attending</span>
+        </h2>
+        <ng-template #noAttendance>
+          <button mat-stroked-button type="button" color="warn" routerLink="/day-offs/attendance-approvals">Attendance not generated go To Day-Off Approvals</button>
+        </ng-template>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <div class="forecast-container" *ngIf="showSummary">
+      <div class="loading-overlay" style="min-height: 6px;" *ngIf="isLoadingSummary |async">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    <table style="min-width: 100%;" [cellSpacing]="0" [cellPadding]="5">
+      <thead>
+        <ng-template #noSummary>
+          <tr>
+            <td class="mat-body-2" align="center" style="border:0px">
+              <span *ngIf="!(isLoadingSummary | async)"> Daily Attendance must be available & Forecast must be selected</span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-container *ngIf="scheduleSummary; else noSummary">
+        <tr class="header-class">
+          <th rowspan="2">
+          </th>
+          <th colspan="4" *ngFor="let hour of hours" align="center" class="mat-body-strong">
+            {{hour}}
+          </th>
+        </tr>
+        <tr class="second-header">
+          <ng-container *ngFor="let hour of hours">
+            <th align="center" class="mat-body-strong">00</th>
+            <th align="center" class="mat-body-strong">15</th>
+            <th align="center" class="mat-body-strong">30</th>
+            <th align="center" class="mat-body-strong">45</th>
+          </ng-container>
+        </tr>
+
+
+        <tr>
+          <th align="left" class="mat-body-strong">
+            Average Needed
+          </th>
+          <td *ngFor="let summary of scheduleSummary" align="center" class="mat-body">
+            {{summary.AverageNeeded}}
+          </td>
+        </tr>
+        <tr>
+          <th align="left" class="mat-body-strong">
+            Max Available
+          </th>
+          <td *ngFor="let summary of scheduleSummary" align="center" class="mat-body">
+            {{summary.AverageAvailable}}
+          </td>
+        </tr>
+        <tr>
+          <th align="left" class="mat-body-strong">
+            <span class="clickable primary-text" [mat-menu-trigger-for]="allMenu"
+            style="font-weight: bold;">Tolerance</span>
+            <mat-menu #allMenu=matMenu class="no-padding">
+              <mat-form-field (click)="$event.stopPropagation();">
+                <mat-label>All Intervals</mat-label>
+                <input #allTolerance matInput type="number" [value]="0" required min=0 [readonly]="isLoadingSummary |async">
+                <button type="button" *ngIf="!(isLoadingSummary | async)" mat-icon-button matSuffix color="primary" [disabled]="+allTolerance.value < 0"
+                (click)="editAllIntervals(+allTolerance.value)">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+                <button matSuffix mat-icon-button style="color:orange"
+                  (click)="setRecommendedAll()"
+                  [matTooltip]="'Apply all recommendations'">
+                    <mat-icon>
+                      warning
+                    </mat-icon>
+                  </button>
+              </mat-form-field>
+            </mat-menu>
+          </th>
+          <td *ngFor="let summary of scheduleSummary" align="center" class="mat-body">
+            <span *ngIf="!(isLoadingInterval | async)?.includes(summary.IntervalId); else spinner"
+            class="clickable primary-text" [mat-menu-trigger-for]="menu"
+            style="font-weight: bold;">
+              {{summary.Tolerance}}
+            </span>
+        <ng-template #spinner>
+          <mat-spinner diameter="20"></mat-spinner>
+        </ng-template>
+        <mat-menu #menu=matMenu class="no-padding">
+          <mat-form-field (click)="$event.stopPropagation();">
+            <mat-label>{{summary.TimeMap}}</mat-label>
+            <input #tolerance matInput type="number" [value]="summary.Tolerance" required min=0 [readonly]="isLoadingSummary |async">
+            <button type="button" *ngIf="!(isLoadingSummary | async)" mat-icon-button matSuffix color="primary" [disabled]="+tolerance.value < 0"
+            (click)="editInterval(summary.IntervalId, +tolerance.value)">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button matSuffix mat-icon-button style="color:orange" *ngIf="getRecommended(summary) > 0"
+            (click)="tolerance.value = getRecommended(summary).toString()"
+            [matTooltip]="'Recommended: ' + getRecommended(summary)">
+              <mat-icon>
+                warning_amber
+              </mat-icon>
+            </button>
+          </mat-form-field>
+        </mat-menu>
+          </td>
+        </tr>
+        <tr>
+          <th align="left" class="mat-body-strong">
+            Difference
+          </th>
+          <td *ngFor="let summary of scheduleSummary" align="center" class="mat-body"
+          [ngStyle]="{'background-color': getColor(summary)}">
+            {{(summary.AverageAvailable * (1 + summary.Tolerance)) - summary.AverageNeeded | number:'1.0-0' }}
+          </td>
+        </tr>
+      </ng-container>
+      </thead>
+    </table>
+    </div>
+  </mat-card-content>
+  </mat-card>
+  <button mat-raised-button [disabled]="frm.invalid || (isLoadingSummary | async) ||
+  schedule.AttendanceStaffCount! <= 0" color="accent" style="width:100%"
+  class="float-bottom">Generate Schedule</button>
+</form>

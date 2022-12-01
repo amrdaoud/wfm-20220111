@@ -1,0 +1,28 @@
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Staff Members
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select Staff Member to update
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <app-data-table
+    [data]="observableData"
+    [columnsDef]="columnsDef"
+    [clickable]="true"
+    [activeSort]="'Id'"
+    [haveFilter]="true"
+    [havePaging]="true"
+    [dataSize]="observableSize"
+    (bindingChanged)="changeBinding($event)"
+    [isLoading]="isLoading"
+    (rowClicked)="goToStaff($event)"
+    [isObservableFilter]="true"
+    >
+    </app-data-table>
+  </mat-card-content>
+</mat-card>
+<button mat-fab class="float-bottom-right" (click)="goToStaff()"><mat-icon>add</mat-icon></button>
+

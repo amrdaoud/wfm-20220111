@@ -1,0 +1,65 @@
+<mat-card style="padding:0;">
+<div class="header mat-typography">
+  <p class="mat-display-3" style="padding-top: 250px; margin-bottom: 0;">
+  <span>WORK</span><span class="primary-text" style="font-weight: bolder;">FORCE</span> MANAGEMENT
+  </p>
+  <div class="mat-subheading-2" style="max-width: 800px; margin-top: 30px;">
+    With Workforce Management, shift data from previous weeks are used to accurately forecast upcoming demand,
+    and build the best schedule. We make sure the right person is scheduled at the right time, automatically,
+    guaranteeing efficiency and response to business demands
+  </div>
+  <div style="margin-top: 50px; align-content: center;">
+    <button class="growing" *ngIf="currentSchedule | async" mat-raised-button color="accent" [routerLink]="'/schedule-details/daily-attendance/' + (currentSchedule | async)?.Schedule?.Id">GO TO CURRENT SCHEDULE</button>
+  </div>
+</div>
+<div style="margin: 0px 20%; margin-top: -320px;">
+<mat-grid-list cols="3" rowHeight="400">
+  <mat-grid-tile *ngIf="(isAdmin  | async) || (isHos | async)">
+    <mat-card class="full-card mat-elevation-z8 growing">
+      <div style="text-align: center; height:80%">
+        <div class="mat-display-1 primary-text" style="height:20%">
+          RESOURCES
+        </div>
+        <div style="height:60%" class="mat-subheading-2">
+          Manage People & Assets and keep aware about your resources by setting their characteristics and configurations
+        </div>
+        <div style="height:20%">
+          <button mat-stroked-button color="accent" style="min-width:60%" [routerLink]="'/resources/staff-members'">GO TO STAFF MEMBERS</button>
+        </div>
+        </div>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile  *ngIf="(isAdmin | async) && showForecast">
+    <mat-card class="full-card mat-elevation-z8 growing">
+      <div style="text-align: center; height:80%">
+      <div class="mat-display-1 primary-text" style="height:20%">
+        FORECASTS
+      </div>
+      <div style="height:60%" class="mat-subheading-2">
+        Use your historical data to expect your clients behavior keeping your business reliable and responsive to change
+      </div>
+      <div style="height:20%">
+        <button mat-stroked-button color="accent" style="min-width:60%" [routerLink]="'/forecasts'">GO TO FORECASTS</button>
+      </div>
+      </div>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card class="full-card mat-elevation-z8 growing">
+       <div style="text-align: center; height:80%">
+      <div class="mat-display-1 primary-text" style="height:20%">
+        SCHEDULES
+      </div>
+      <div style="height:60%" class="mat-subheading-2">
+        Generate efficient schedule with your pre-defined resources ensuring staff and assets availability over working days
+      </div>
+      <div style="height:20%">
+        <button mat-stroked-button color="accent" style="min-width:60%" [routerLink]="(isAdmin | async) ? '/schedules' : '/schedules/my-schedules'">GO TO SCHEDULES</button>
+      </div>
+      </div>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>
+
+</mat-card>

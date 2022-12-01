@@ -1,0 +1,99 @@
+
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Forecasts
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select unsaved forecast to update
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+    <!-- <app-data-table
+    [data]="observableData"
+    [columnsDef]="columnsDef"
+    [clickable]="true"
+    (rowClicked)="goToForecast($event)"
+    [isLoading]="isLoading"
+    >
+    </app-data-table> -->
+    <div style="height:100%; overflow-y:auto">
+      <div style="min-height: 6px;">
+        <mat-progress-bar mode="indeterminate" *ngIf="(isLoading | async) || (isDeleting | async)"></mat-progress-bar>
+      </div>
+    <mat-grid-list cols="3" rowHeight="200" >
+      <mat-grid-tile *ngFor="let forecast of observableData | async">
+        <app-selector-card [icon]="forecast.IsSaved ? 'save' : ''" iconColor="primary">
+          <div title>
+            {{forecast.Name}}
+          </div>
+          <div subtitle>
+            {{forecast.StartDate | date:'EEE dd/MM/yyyy'}} - {{forecast.EndDate | date:'EEE dd/MM/yyyy'}}
+          </div>
+          <div content>
+            <table width="100%" style="font-size: small;">
+              <tr>
+                <th align="left" class="mat-body-2">
+                  Criteria:
+                </th>
+                <td>
+                  Answer {{forecast.ServiceLevel | percent}} of calls within {{forecast.ServiceTime}} seconds.
+                </td>
+              </tr>
+              <tr>
+                <th align="left" class="mat-body-2">
+                  Duration .Tol:
+                </th>
+                <td>
+                  {{forecast.DurationTolerance | percent}}
+                </td>
+              </tr>
+              <tr>
+                <th align="left" class="mat-body-2">
+                  Offered .Tol:
+                </th>
+                <td>
+                  {{forecast.OfferedTolerance | percent}}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div overlayContents style="height:100%">
+            <mat-grid-list cols="3" rowHeight="fit" style="height:100%">
+              <mat-grid-tile>
+                <button mat-mini-fab class="growing" color='' *ngIf="forecast.IsSaved"
+                [routerLink]="'/forecasts/' + forecast.Id"
+                matTooltip="Preview">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-mini-fab class="growing" color='' *ngIf="!forecast.IsSaved"
+                [routerLink]="'/forecasts/' + forecast.Id"
+                matTooltip="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <button mat-mini-fab class="growing" color="primary" [disabled]="forecast.IsSaved"
+                (click)="save(forecast)"
+                matTooltip="Save">
+                  <mat-icon>save</mat-icon>
+                </button>
+              </mat-grid-tile>
+              <mat-grid-tile>
+                <button mat-mini-fab class="growing" color="warn"
+                (click)="delete(forecast)"
+                matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </app-selector-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  </mat-card-content>
+</mat-card>
+<button mat-fab class="float-bottom-right" routerLink="/forecasts/add"><mat-icon>add</mat-icon></button>
+

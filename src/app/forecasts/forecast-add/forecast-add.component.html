@@ -1,0 +1,119 @@
+<button mat-stroked-button class="float-top-right" color="primary" [routerLink]="'/forecasts'">
+  Back To Forecasts
+</button>
+<form *ngIf="frm" [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-container">
+    <mat-card-header>
+      <mat-card-title>
+        {{forecast ? forecast.Name : 'New Forecast'}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingName | async" controlName="Name" label="Name" type="text"></app-input>
+      <mat-grid-list cols="5" rowHeight="140" gutterSize="10">
+        <mat-grid-tile colspan="2">
+            <table width=100% class="form-table" [cellSpacing]="10">
+              <tr>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Select Period</mat-label>
+                      <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date" formControlName="StartDate">
+                        <input matEndDate placeholder="End date" formControlName="EndDate">
+                      </mat-date-range-input>
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker></mat-date-range-picker>
+                  </mat-form-field>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <mat-form-field>
+                    <mat-label>Except</mat-label>
+                    <mat-select multiple formControlName="ExceptDates">
+                      <mat-option *ngFor="let date of dToExeclude" [value]="date">
+                        {{date | date:'dd/MM/yyyy'}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+              </tr>
+            </table>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <table width=100% class="form-table" [cellSpacing]="10">
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Service Level %</mat-label>
+                  <input type="number" matInput formControlName="ServiceLevel">
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Service Time</mat-label>
+                  <input type="number" matInput formControlName="ServiceTime">
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <table width=100% class="form-table" [cellSpacing]="10">
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Duration Tolerance %</mat-label>
+                  <input type="number" matInput formControlName="DurationTolerance">
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Offered Tolerance</mat-label>
+                  <input type="number" matInput formControlName="OfferedTolerance">
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <table width=100% [cellSpacing]="10">
+            <tr>
+              <td>
+               <button mat-raised-button type="submit" color="primary" style="width:100%"
+               [disabled]="(isLoadingAdd | async) || forecast?.IsSaved">Generate</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+               <button mat-raised-button type="button" style="width:100%" (click)="save()"
+               [disabled]="(isLoadingAdd | async) || forecast?.IsSaved || !forecast?.ForecastDetails">Save</button>
+              </td>
+            </tr>
+          </table>
+        </mat-grid-tile>
+      </mat-grid-list>
+        <div style="height:6px">
+          <mat-progress-bar *ngIf="isLoadingAdd | async" mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div *ngIf="forecast?.ForecastDetails">
+          <app-forecast-details [data]="forecastDetails" [isDisabled]="forecast!.IsSaved || (isLoadingAdd | async)!"></app-forecast-details>
+        </div>
+    </mat-card-content>
+    <!-- <mat-card-actions align="end">
+      <button mat-stroked-button color="primary" type="button" routerLink="/forecasts">Back To List</button>
+      <button mat-stroked-button type="button">Reset</button>
+      <button mat-raised-button color="primary">Submit</button>
+    </mat-card-actions> -->
+
+  </mat-card>
+</form>
+<mat-progress-bar *ngIf="isLoading | async" mode="indeterminate"></mat-progress-bar>
+

@@ -1,0 +1,57 @@
+<mat-card class="full-container-backup">
+  <mat-card-header>
+    <mat-card-title>
+      {{attendance.staffName}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{attendance.dailyAttendance.Day | date: 'EEE dd/MM/yyyy'}} (History)
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="schedule-table">
+      <div style="min-height: 6px;">
+        <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
+      </div>
+      <div class="intervals-container" *ngIf="attendance.dailyAttendance">
+        <mat-radio-group aria-label="Select an option" class="no-ripple" [formControl]="idControl">
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="Action" sticky>
+            <th mat-header-cell *matHeaderCellDef style="min-width:300px;"> Action </th>
+            <td mat-cell *matCellDef="let element" style="min-width: 50px; text-align: left;">
+              <mat-radio-button [value]="element.Id" [disableRipple]="true" [disabled]="element.Id === 0">
+                {{element.Alias}}  {{element.ActionTime  | date : 'dd/MM/yyyy HH:mm'}}
+              </mat-radio-button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Type" sticky>
+            <th mat-header-cell *matHeaderCellDef style="min-width:100px;"> Type </th>
+            <td mat-cell *matCellDef="let element">
+              {{element.AttendanceType}}
+            </td>
+          </ng-container>
+          <ng-container *ngFor="let interval of intervalsObservable | async" [matColumnDef]="interval.Id.toString()">
+            <th mat-header-cell *matHeaderCellDef style="writing-mode: vertical-rl">
+              {{interval.TimeMap.substring(0,5)}}
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <div class="interval-div"
+              [ngStyle]="{'background-color':element.ScheduleDetails[interval.Id]?.ActivityColor}"
+              [matTooltip]="element.ScheduleDetails[interval.Id]?.ActivityName"
+            ></div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns:columns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4" *ngIf="!(isLoading | async)">No data..</td>
+          </tr>
+        </table>
+      </mat-radio-group>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions align="end" style="margin-bottom:0px;">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="idControl.invalid" (click)="submit()">Restore</button>
+  </mat-card-actions>
+</mat-card>

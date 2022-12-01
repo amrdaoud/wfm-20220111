@@ -1,0 +1,25 @@
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Attendance Types
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select Attendance Types to update
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+    <app-data-table
+    [data]="observableData"
+    [columnsDef]="columnsDef"
+    [clickable]="true"
+    (rowClicked)="openType($event)"
+    [isLoading]="isLoading"
+    [haveFilter]="true"
+    >
+    </app-data-table>
+
+  </mat-card-content>
+</mat-card>
+<button mat-fab class="float-bottom-right" (click)="openType()"><mat-icon>add</mat-icon></button>
+

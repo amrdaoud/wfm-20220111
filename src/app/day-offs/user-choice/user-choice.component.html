@@ -1,0 +1,107 @@
+<form *ngIf="frm" [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-container">
+    <mat-card-header>
+      <mat-card-title>
+       {{userChoice?.StaffMemberName}}
+       <mat-icon *ngIf="frm.disabled" color="accent">
+        done_all
+       </mat-icon>
+      </mat-card-title>
+      <mat-card-subtitle>
+        During {{userChoice?.ScheduleName}}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>
+                Attendance Type
+              </mat-label>
+              <mat-select formControlName="AttendenceTypeId">
+                <mat-option *ngFor="let type of attendanceTypes | async" [value]="type.Id">
+                  {{type.Name}}
+                </mat-option>
+              </mat-select>
+              <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingTypes | async"></mat-spinner>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td formGroupName="DayOption1">
+            <mat-form-field>
+              <mat-label>
+                Days Off 1'st Choice
+              </mat-label>
+              <mat-select formControlName="Days" multiple>
+                <mat-option *ngFor="let day of weekDyas" [value]="day">
+                  {{day}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix color="accent" *ngIf="userChoice?.DayOption1?.IsApproved">
+                check
+              </mat-icon>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td formGroupName="DayOption2">
+            <mat-form-field>
+              <mat-label>
+                Days Off 2'nd Choice
+              </mat-label>
+              <mat-select formControlName="Days" multiple>
+                <mat-option *ngFor="let day of weekDyas" [value]="day">
+                  {{day}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix color="accent" *ngIf="userChoice?.DayOption2?.IsApproved">
+                check
+              </mat-icon>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td formGroupName="DayOption3">
+            <mat-form-field>
+              <mat-label>
+                Days Off 3'rd Choice
+              </mat-label>
+              <mat-select formControlName="Days" multiple>
+                <mat-option *ngFor="let day of weekDyas" [value]="day">
+                  {{day}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix color="accent" *ngIf="userChoice?.DayOption3?.IsApproved">
+                check
+              </mat-icon>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td formGroupName="DayOption4">
+            <mat-form-field>
+              <mat-label>
+                Admin Choice
+              </mat-label>
+              <mat-select formControlName="Days" multiple>
+                <mat-option *ngFor="let day of weekDyas" [value]="day">
+                  {{day}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix color="accent" *ngIf="userChoice?.DayOption4?.IsApproved">
+                check
+              </mat-icon>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="frm.invalid || frm.disabled || (isLoading | async)">Submit</button>
+
+    </mat-card-actions>
+  </mat-card>
+</form>
+<mat-progress-bar *ngIf="isLoading | async" mode="indeterminate"></mat-progress-bar>

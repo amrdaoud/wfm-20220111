@@ -1,0 +1,59 @@
+<mat-card class="full-dialog-container">
+  <mat-card-header>
+    <mat-card-title>
+      Groups
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select Groups To Add
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="dialog-form-table">
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>
+              Select Role
+            </mat-label>
+            <mat-select [(ngModel)]="ret.Role">
+              <mat-option value="Admin">
+                Admin
+              </mat-option>
+              <mat-option value="Hos">
+                Hos
+              </mat-option>
+              <mat-option value="User">
+                User
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>
+              Search
+            </mat-label>
+            <input matInput [formControl]="searchControl">
+            <mat-spinner matSuffix diameter="20" *ngIf="isLoading | async"></mat-spinner>
+            <mat-icon matSuffix color="primary" *ngIf="!(isLoading | async)">search</mat-icon>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-selection-list [(ngModel)]="ret.Groups">
+            <mat-list-option *ngFor="let group of groups | async" [value]="group">
+              {{group}}
+            </mat-list-option>
+          </mat-selection-list>
+        </td>
+      </tr>
+    </table>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="!ret.Role || ret.Groups.length == 0" (click)="add()">Add</button>
+  </mat-card-actions>
+</mat-card>

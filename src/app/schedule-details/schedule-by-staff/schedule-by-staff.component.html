@@ -1,0 +1,24 @@
+<button mat-stroked-button class="float-top-right" color="primary" (click)="goBack()">
+  Back To Daily Attendance
+</button>
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title *ngIf="data">
+      {{data.ScheduleName}} Schedule
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="data">
+      {{staffName}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <app-schedule-details-table
+    [scheduleId]="scheduleId"
+    [staffId]="staffId"
+    [staffName]="staffName"
+    [dataSource]="dataSource"
+    [haveAccess]="haveAccess"
+    ></app-schedule-details-table>
+  </mat-card-content>
+</mat-card>
+
+

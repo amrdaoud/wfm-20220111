@@ -1,0 +1,67 @@
+<form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+<mat-grid-list rowHeight="90" cols="6" class="adherence-filter">
+<mat-grid-tile>
+  <mat-form-field>
+      <mat-label>Select Period</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date" formControlName="DateFrom">
+          <input matEndDate placeholder="End date" formControlName="DateTo">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+</mat-grid-tile>
+
+<mat-grid-tile>
+  <mat-form-field>
+      <mat-label>Filter By</mat-label>
+        <mat-select formControlName="FilterType">
+          <mat-option *ngFor="let item of filterTypes" [value]="item.Name">
+            {{item.View}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-grid-tile>
+
+<mat-grid-tile>
+  <mat-form-field>
+      <mat-label>Filter Values</mat-label>
+      <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           formControlName="FilterValue"
+           [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filterValues | async" [value]="option.Name">
+            #{{option.Id}}-{{option.Name}}
+          </mat-option>
+          <mat-option [value]="[]">
+            All
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</mat-grid-tile>
+
+<mat-grid-tile>
+  <mat-form-field>
+      <mat-label>Group By</mat-label>
+        <mat-select formControlName="GroupBy">
+          <mat-option *ngFor="let item of filterTypes" [value]="item.Name">
+            {{item.View}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-grid-tile>
+
+<mat-grid-tile>
+  <span class="slide-span">Overall</span>
+  <mat-slide-toggle formControlName="IsDaily"></mat-slide-toggle>
+  <span class="slide-span">Daily</span>
+</mat-grid-tile>
+
+<mat-grid-tile>
+  <button mat-raised-button color="accent" [disabled]="filterForm.invalid">Submit</button>
+</mat-grid-tile>
+</mat-grid-list>
+</form>

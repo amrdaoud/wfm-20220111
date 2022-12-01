@@ -1,0 +1,35 @@
+<button mat-stroked-button class="float-top-right" color="primary" (click)="goBack()">
+  Back To Daily Attendance
+</button>
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title *ngIf="staffName">
+      {{staffName}}
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="staffName">
+      <button mat-icon-button
+      (click)="previousDay()"
+      [disabled]="isPreviousDisabled"
+      matTooltip="Previous Day">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+      <span style="display: inline-block;
+      width: 150px; text-align: center;">{{day | date: 'EEE dd/MM/yyyy'}}</span>
+      <button mat-icon-button
+      [disabled]="isNextDisabled"
+      matTooltip="Next Day"
+      (click)="nextDay()">
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+  <app-schedule-details-table
+  [scheduleId]="scheduleId"
+  [staffId]="staffId"
+  [staffName]="staffName"
+  [dataSource]="dataSource"
+  [haveAccess]="haveAccess"
+  ></app-schedule-details-table>
+  </mat-card-content>
+</mat-card>

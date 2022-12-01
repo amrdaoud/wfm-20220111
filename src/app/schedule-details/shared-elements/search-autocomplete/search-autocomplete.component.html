@@ -1,0 +1,27 @@
+<mat-form-field style="width:60%; max-width: 280px;">
+  <input matInput cdkTrapFocus [cdkTrapFocusAutoCapture]="true"
+  [placeholder]="typeControl.value == 'Staff' ? 'Staff ID, Name Or Email' : typeControl.value == 'Hos' ? 'Hos ID, Name Or Email': 'Transportation Id Or Name'"
+  [formControl]="searchControl" [matAutocomplete]="auto">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.Name" style="font-size: 12px;">
+      #{{option.EmployeeId ? option.EmployeeId : option.Id}}-{{option.Name}}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-icon matSuffix color="primary">search</mat-icon>
+</mat-form-field>
+<mat-form-field style="width:30%; max-width: 280px;">
+  <mat-label>
+    Search by
+  </mat-label>
+  <mat-select [formControl]="typeControl">
+    <mat-option value="Staff">
+      Staff
+    </mat-option>
+    <mat-option value="Hos">
+      HOS
+    </mat-option>
+    <mat-option value="Transportation">
+      Transportation
+    </mat-option>
+  </mat-select>
+</mat-form-field>

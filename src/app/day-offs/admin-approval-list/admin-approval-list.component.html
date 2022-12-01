@@ -1,0 +1,58 @@
+<button mat-stroked-button class="float-top-right" color="primary" [routerLink]="'/schedules'">
+  Back To Schedules
+</button>
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Admin Attendance Approvals
+    </mat-card-title>
+    <mat-card-subtitle>
+      All requests must be approved to create attendance
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group class="unscrollable data-table">
+      <mat-tab>
+        <ng-template mat-tab-label>Need Approvals
+          <span *ngIf="!(isLoading | async)">({{(needApprovalData | async)?.length}})</span>
+        </ng-template>
+        <app-admin-need-approval
+        [data]="needApprovalData"
+        [isLoading]="isLoading"
+        [shiftsObservable]="shiftsObservable"
+        [attendanceTypesObservable]="attendanceTypesObservable"
+        (approved)="approve($event)"
+        [loadingApproveItems]="loadingApproveItems">
+      </app-admin-need-approval>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Approved
+          <span *ngIf="!(isLoading | async)">({{(approvedData | async)?.length}})</span>
+        </ng-template>
+        <app-admin-approved
+        [data]="approvedData"
+        [isLoading]="isLoading"
+        [shiftsObservable]="shiftsObservable"
+        [attendanceTypesObservable]="attendanceTypesObservable"
+        (edited)="edit($event)"
+        [loadingEditItems]="loadingEditItems">
+      </app-admin-approved>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon" color="primary" *ngIf="(needApprovalData | async)?.length === 0">check_circle_outline</mat-icon>
+          Summary</ng-template>
+        <app-approved-summary
+        [data]="reportResult"
+        [shifts]="shiftsObservable | async"
+        [isLoading]="isLoading"
+        [isDisabled]="(isLoading | async) || ((approvedData | async)?.length === 0)"
+        (btnClicked)="createAttendance()">
+      </app-approved-summary>
+      </mat-tab>
+    </mat-tab-group>
+
+  </mat-card-content>
+</mat-card>
+
+

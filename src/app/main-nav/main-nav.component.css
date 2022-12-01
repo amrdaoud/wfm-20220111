@@ -1,0 +1,8 @@
+.logo {
+  margin-right: 100px;
+  cursor: pointer;
+}
+
+.mat-toolbar .mat-button, .mat-raised-button{
+  height:100%;
+}

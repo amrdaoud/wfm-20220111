@@ -1,0 +1,11 @@
+<mat-form-field>
+  <mat-label>
+    {{label}}
+  </mat-label>
+  <input matInput [type]="type" [formControl]="formControl">
+  <div matSuffix style="width:20px;">
+    <mat-icon matSuffix color="warn" *ngIf="!isChecking && formControl.touched && formControl.invalid" [matTooltip]="getErrors()">error</mat-icon>
+    <mat-icon matSuffix color="primary" *ngIf="!isChecking && formControl.touched && isAsync && formControl.valid">check</mat-icon>
+    <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isAsync && isChecking"></mat-spinner>
+  </div>
+</mat-form-field>

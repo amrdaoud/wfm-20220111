@@ -1,0 +1,81 @@
+<mat-card>
+<div class="grid-container">
+  <mat-card-header>
+    <mat-card-title>
+      Schedule Dashboard
+    </mat-card-title>
+  </mat-card-header>
+  <div style="width:100%; text-align: center;">
+    <mat-form-field style="width:50%; margin: 0 auto;;">
+      <mat-label>
+        Select Schedule
+      </mat-label>
+      <mat-select [formControl]="scheduleControl">
+        <mat-option *ngFor="let schedule of schedulesObservable | async" [value]="schedule">
+          {{schedule.Name}} ({{schedule.StartDate | date: 'EEE dd/MM/yyyy'}}-{{schedule.EndDate | date: 'EEE dd/MM/yyyy'}})
+        </mat-option>
+      </mat-select>
+      <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingSchedules | async"></mat-spinner>
+    </mat-form-field></div>
+
+  <mat-grid-list cols="3" rowHeight="400px">
+    <mat-grid-tile [colspan]="3" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Needed Vs Available
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <app-daily-report [schedule]="scheduleControl?.value"></app-daily-report>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Leader Board
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <app-leader-board [schedule]="scheduleControl?.value"></app-leader-board>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Adherence By Head Of Section
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <app-adherence-by-hos [schedule]="scheduleControl?.value"></app-adherence-by-hos>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+</mat-card>

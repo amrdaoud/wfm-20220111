@@ -1,0 +1,111 @@
+
+<button mat-fab class="float-bottom-right" color="primary" (click)="save()"><mat-icon>save</mat-icon></button>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+     Admin/Roles
+    </mat-card-title>
+    <mat-card-subtitle>
+      Add Windows Roles Mapping
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="height:100%" *ngIf="rolesMapping">
+      <div class="mat-h1" style="width:100%">Windows Groups
+        <button mat-raised-button color="accent" (click)="openAddGroup()"><mat-icon>add</mat-icon> Add New Group</button>
+      </div>
+      <mat-grid-list rowHeight="300" cols="3">
+        <mat-grid-tile>
+          <mat-card class="group-card">
+            <mat-toolbar style="height:40px">
+              Admin
+            </mat-toolbar>
+            <mat-list style="width:100%;height:220px; overflow-y: auto;">
+              <mat-list-item *ngFor="let item of rolesMapping.Groups.Admin; let i = index">
+                {{item}}
+                <span class="full-spacer"></span>
+                <button mat-icon-button (click)="removeElement(rolesMapping.Groups.Admin, i)"><mat-icon>cancel</mat-icon></button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card class="group-card">
+            <mat-toolbar style="height:40px">
+              Hos
+            </mat-toolbar>
+            <mat-list style="width:100%;height:220px; overflow-y: auto;">
+              <mat-list-item *ngFor="let item of rolesMapping.Groups.Hos;let i = index">
+                {{item}}
+                <span class="full-spacer"></span>
+                <button mat-icon-button (click)="removeElement(rolesMapping.Groups.Hos, i)"><mat-icon>cancel</mat-icon></button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card class="group-card">
+            <mat-toolbar style="height:40px">
+              User
+            </mat-toolbar>
+            <mat-list style="width:100%;height:220px; overflow-y: auto;">
+              <mat-list-item *ngFor="let item of rolesMapping.Groups.User; let i = index">
+                {{item}}
+                <span class="full-spacer"></span>
+                <button mat-icon-button (click)="removeElement(rolesMapping.Groups.User, i)"><mat-icon>cancel</mat-icon></button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+<div style="height:40px"></div>
+      <div class="mat-h1">Windows Users
+        <button mat-raised-button color="accent" (click)="openAddUser()"><mat-icon>add</mat-icon> Add New User</button>
+      </div>
+      <mat-grid-list rowHeight="300" cols="3">
+        <mat-grid-tile>
+          <mat-card class="group-card">
+            <mat-toolbar style="height:40px">
+              Admin
+            </mat-toolbar>
+            <mat-list style="width:100%;height:220px; overflow-y: auto;">
+              <mat-list-item *ngFor="let item of rolesMapping.Users.Admin; let i = index">
+                {{item}}
+                <span class="full-spacer"></span>
+                <button mat-icon-button (click)="removeElement(rolesMapping.Users.Admin, i)"><mat-icon>cancel</mat-icon></button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card class="group-card">
+            <mat-toolbar style="height:40px">
+              Hos
+            </mat-toolbar>
+            <mat-list style="width:100%;height:220px; overflow-y: auto;">
+              <mat-list-item *ngFor="let item of rolesMapping.Users.Hos; let i = index">
+                {{item}}
+                <span class="full-spacer"></span>
+                <button mat-icon-button (click)="removeElement(rolesMapping.Users.Hos, i)"><mat-icon>cancel</mat-icon></button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-card class="group-card">
+            <mat-toolbar style="height:40px">
+              User
+            </mat-toolbar>
+            <mat-list style="width:100%;height:220px; overflow-y: auto;">
+              <mat-list-item *ngFor="let item of rolesMapping.Users.User; let i = index">
+                {{item}}
+                <span class="full-spacer"></span>
+                <button mat-icon-button (click)="removeElement(rolesMapping.Users.User, i)"><mat-icon>cancel</mat-icon></button>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+  </div>
+  </mat-card-content>
+</mat-card>

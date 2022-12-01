@@ -1,0 +1,44 @@
+<mat-card class="full-dialog-container">
+  <mat-card-header>
+    <mat-card-title>
+      Swap Request Details
+    </mat-card-title>
+    <mat-card-subtitle>
+      #{{data.Id}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-grid-list cols="5" rowHeight="120">
+      <mat-grid-tile colspan="2">
+      <table>
+        <tr>
+          <td>{{data.RequesterName}}</td>
+        </tr>
+        <tr>
+          <td>on {{data.RequesterDay | date: 'EEEE dd/MM/yyyy'}}</td>
+        </tr>
+      </table>
+    </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-icon>swap_horiz</mat-icon>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="2">
+        <table>
+          <tr>
+            <td>{{data.ResponderName}}</td>
+          </tr>
+          <tr>
+            <td>on {{data.ResponderDay | date: 'EEEE dd/MM/yyyy'}}</td>
+          </tr>
+        </table>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+  <mat-card-actions *ngIf="data.CanAction && !data.CanReverse" align="end">
+    <button mat-raised-button color="warn" (click)="closeApproval('Decline')">Decline</button>
+    <button mat-raised-button color="primary" (click)="closeApproval('Approve')">Approve</button>
+  </mat-card-actions>
+  <mat-card-actions *ngIf="data.CanReverse && !data.CanAction" align="end">
+    <button mat-raised-button color="accent" (click)="closeApproval('Reverse')">Reverse</button>
+  </mat-card-actions>
+</mat-card>

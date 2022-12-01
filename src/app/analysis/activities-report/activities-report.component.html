@@ -1,0 +1,29 @@
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Activities Report
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select Date To Generate Report
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="height:10%">
+        <mat-form-field class="no-wrapper">
+          <mat-label>Day</mat-label>
+          <input readonly matInput [matDatepicker]="picker" placeholder="Date" [formControl]="dateControl">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div style="height:90%">
+      <app-data-table
+      [data]="observableData"
+      [columnsDef]="columnsDef"
+      [isLoading]="isLoading"
+      [padding]="'10px'"
+      >
+    </app-data-table>
+    </div>
+  </mat-card-content>
+</mat-card>

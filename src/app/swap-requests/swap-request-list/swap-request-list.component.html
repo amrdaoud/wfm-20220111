@@ -1,0 +1,24 @@
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Swap Requests
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select a swap request to see details
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+
+    <app-data-table
+    [data]="observableData"
+    [columnsDef]="columnsDef"
+    [clickable]="true"
+    [isLoading]="isLoading"
+    (rowClicked)="showDetails($event)"
+    >
+    </app-data-table>
+
+  </mat-card-content>
+</mat-card>
+
+

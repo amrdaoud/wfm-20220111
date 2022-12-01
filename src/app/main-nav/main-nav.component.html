@@ -1,0 +1,61 @@
+<mat-toolbar  class="main-nav mat-elevation-z4">
+  <span class="logo" routerLink="">WORK<strong class="primary-text">FORCE</strong><small style="font-size: 12px;">({{tenant}})</small></span>
+  <ng-container *ngFor="let item of navItems">
+  <button mat-button [color]="!item.IsAccent ? '' : 'accent'"
+  [routerLink]="item.Path"
+  [matMenuTriggerFor]="childMenu">
+    <mat-icon>{{item.Icon}}</mat-icon>
+    {{item.Name}}
+    <mat-icon>expand_more</mat-icon>
+    <mat-menu #childMenu="matMenu" class="nav-width">
+      <ng-container *ngFor="let childItem of item.Items" >
+        <button mat-menu-item  *ngIf="childItem.Items; else noChilds"
+      [routerLink]="childItem.Path"
+      [matMenuTriggerFor]= superChildMenu>
+        <mat-icon [color]="!childItem.IsAccent ? 'primary' : 'accent'">{{childItem.Icon}}</mat-icon>
+        {{childItem.Name}}
+      </button>
+      <ng-template #noChilds>
+        <button  mat-menu-item
+        [routerLink]="childItem.Path">
+        <mat-icon [color]="!childItem.IsAccent ? 'primary' : 'accent'">{{childItem.Icon}}</mat-icon>
+        {{childItem.Name}}
+      </button>
+      </ng-template>
+      <mat-menu #superChildMenu="matMenu" class="nav-width second-nav">
+          <button mat-menu-item *ngFor="let superChildItem of childItem.Items"
+          [routerLink]="superChildItem.Path">
+            <mat-icon [color]="!superChildItem.IsAccent ? 'primary' : 'accent'">{{superChildItem.Icon}}</mat-icon>
+            {{superChildItem.Name}}
+            </button>
+      </mat-menu>
+      </ng-container>
+    </mat-menu>
+  </button>
+</ng-container>
+  <span class="full-spacer"></span>
+  <button mat-icon-button [mat-menu-trigger-for]="themeMenu"><mat-icon color="accent">brush</mat-icon> </button>
+  <button mat-button *ngIf="alias" [matMenuTriggerFor]="userMenu">{{alias}}</button>
+  <img *ngIf="avatarUrl" [src]="avatarUrl" alt="Avatar" class="avatar" onerror="this.onerror=null; this.src='assets/images/default_avatar.png';">
+</mat-toolbar>
+<mat-menu #userMenu="matMenu" class="no-padding">
+  <mat-form-field (click)="$event.stopPropagation();" *ngIf="roles?.includes('SuperUser')">
+    <mat-label>Pretend to be</mat-label>
+    <input #newPretend matInput type="text" [value]="alias" required>
+    <button  mat-icon-button matSuffix color="primary"
+      (click)="changePretend(newPretend.value)">
+    <mat-icon>check_circle</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-list *ngIf="roles">
+    <h3 matSubheader>My Roles</h3>
+    <mat-list-item *ngFor="let role of roles">
+      {{role}}
+    </mat-list-item>
+
+  </mat-list>
+</mat-menu>
+<mat-menu #themeMenu="matMenu">
+  <button mat-menu-item (click)="changeTheme('default')"><mat-icon color="accent">light_mode</mat-icon>Light Mode</button>
+  <button mat-menu-item (click)="changeTheme('dark')"><mat-icon color="accent">dark_mode</mat-icon>Dark Mode</button>
+</mat-menu>

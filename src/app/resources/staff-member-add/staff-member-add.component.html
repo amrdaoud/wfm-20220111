@@ -1,0 +1,222 @@
+<button mat-stroked-button class="float-top-right" color="primary" [routerLink]="'/resources/staff-members'">
+  Back To Staff Members
+</button>
+<form *ngIf="frm" [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-container">
+    <mat-card-header>
+      <mat-card-title>
+        {{staffMember ? staffMember.Name : 'New Staff Member'}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-grid-list cols="3" rowHeight="200" gutterSize="10">
+        <mat-grid-tile colspan="2">
+            <table width=100% class="form-table" [cellSpacing]="10">
+              <tr>
+                <td colspan="4" class="mat-subheading-1">
+                  Main Information
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingEmployeeId | async" controlName="EmployeeId" label="Employee Id" type="number"></app-input>
+                </td>
+                <td>
+                  <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingAlias | async" controlName="Alias" label="Alias" type="text"></app-input>
+                </td>
+                <td>
+                  <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingName | async" controlName="Name" label="Name" type="text"></app-input>
+                </td>
+                <td>
+                  <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingEmail | async" controlName="Email" label="Email" type="text"></app-input>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <mat-form-field>
+                    <mat-label>
+                      Type
+                    </mat-label>
+                    <mat-select formControlName="StaffTypeId">
+                      <mat-option *ngFor="let type of typesObservable | async" [value]="type.Id">
+                        {{type.Name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingTypes | async"></mat-spinner>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>
+                      Head Of Section
+                    </mat-label>
+                    <mat-select formControlName="HeadOfSectionId">
+                      <mat-option *ngFor="let head of headsObservable | async" [value]="head.Id">
+                        {{head.Name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingHeads | async"></mat-spinner>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>
+                      Transportation
+                    </mat-label>
+                    <mat-select formControlName="TransportationRouteId">
+                      <mat-option *ngFor="let transportation of transportationsObservable | async" [value]="transportation.Id">
+                        {{transportation.Name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingTransportations | async"></mat-spinner>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field>
+                    <mat-label>
+                      Location
+                    </mat-label>
+                    <mat-select formControlName="LocationId">
+                      <mat-option *ngFor="let location of locationsObservable | async" [value]="location.Id">
+                        {{location.Name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingLocations | async"></mat-spinner>
+                  </mat-form-field>
+                </td>
+              </tr>
+            </table>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <table width=100% class="form-table" [cellSpacing]="10">
+            <tr>
+              <td colspan="2" class="mat-subheading-1">
+                Hire Information
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Hire Date</mat-label>
+                  <input matInput [matDatepicker]="hirePicker" formControlName="HireDate">
+                  <mat-datepicker-toggle matSuffix [for]="hirePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #hirePicker></mat-datepicker>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>
+                    Leave In (Days)
+                  </mat-label>
+                  <input matInput type="number" formControlName="EstimatedLeaveDays">
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="startPicker" formControlName="StartDate">
+                  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>Leave Date</mat-label>
+                  <input matInput [matDatepicker]="leavePicker" formControlName="LeaveDate">
+                  <mat-datepicker-toggle matSuffix [for]="leavePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #leavePicker></mat-datepicker>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="3">
+          <table width=100% class="form-table" [cellSpacing]="10">
+            <tr>
+              <td colspan="4" class="mat-subheading-1">
+                Other Information
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>
+                    Gender
+                  </mat-label>
+                  <mat-select formControlName="Gender">
+                    <mat-option *ngFor="let gender of genders" [value]="gender">{{gender}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>
+                    Language
+                  </mat-label>
+                  <mat-select formControlName="Language">
+                    <mat-option *ngFor="let language of languages" [value]="language">{{language}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>
+                    Religion
+                  </mat-label>
+                  <mat-select formControlName="Religion">
+                    <mat-option *ngFor="let religion of religions" [value]="religion">{{religion}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>
+                    Address
+                  </mat-label>
+                  <input matInput formControlName="Address">
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <mat-form-field>
+                  <mat-label>
+                    Phone
+                  </mat-label>
+                  <input matInput formControlName="PhoneNumber">
+                </mat-form-field>
+              </td>
+              <td colspan="3">
+                <mat-form-field>
+                  <mat-label>
+                    Other Notes
+                  </mat-label>
+                  <input matInput formControlName="Note">
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <small style="color: red" *ngIf="frm.errors && frm.errors['startLeave']">* Start Date is greater than Leave Date</small>
+      <small style="color: red" *ngIf="frm.errors && frm.errors['hireStart'] && !frm.errors['startLeave']">* Hire Date is greater than Start Date</small>
+      <button mat-stroked-button type="button" (click)="reset()">Reset</button>
+      <button mat-raised-button color="primary"
+      [disabled]="frm.invalid ||
+      (isLoading | async) ||
+      (isCheckingEmployeeId | async) ||
+      (isCheckingAlias | async) ||
+      (isCheckingName | async) ||
+      (isCheckingEmail | async)
+      ">Submit</button>
+    </mat-card-actions>
+      <mat-progress-bar *ngIf="isLoading | async" mode="indeterminate"></mat-progress-bar>
+  </mat-card>
+</form>

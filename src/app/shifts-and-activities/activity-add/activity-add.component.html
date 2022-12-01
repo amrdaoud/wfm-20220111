@@ -1,0 +1,46 @@
+<form [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-dialog-container">
+    <mat-card-header>
+      <mat-card-title>
+        {{newOrUpdate}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="dialog-form-table">
+        <tr>
+          <td colspan="2">
+            <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingName | async" controlName="Name" label="Name" type="text"></app-input>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingColor | async" controlName="Color" label="Color" type="color"></app-input>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-checkbox formControlName="IsPhone">Phone</mat-checkbox>
+          </td>
+          <td>
+            <mat-checkbox formControlName="IsAbsence">Absence</mat-checkbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-checkbox formControlName="IsPaid">Paid</mat-checkbox>
+          </td>
+          <td>
+            <mat-checkbox formControlName="IsWorkTime">Work Time</mat-checkbox>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button mat-dialog-close type="button">Cancel</button>
+      <button mat-raised-button color="primary">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>

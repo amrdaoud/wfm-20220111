@@ -1,0 +1,41 @@
+<div class="daily-report-container">
+  <app-line-chart
+    [reportData]="dataObservable"
+    [labelsHandler]="'TimeMap'"
+    [valueHandlers]="['Forecast','Needed','Available']"
+    [isLoading]="isLoading">
+  </app-line-chart>
+</div>
+
+<div class="daily-report-footer">
+  <table align="center">
+    <tr>
+      <td align="right">
+        <button mat-icon-button color="accent"
+        (click)="nextDay(-1)"
+        [disabled]="leftDisabled | async">
+          <mat-icon>
+            chevron_left
+          </mat-icon>
+        </button>
+      </td>
+      <td>
+        <mat-form-field class="no-wrapper">
+          <mat-label>Day</mat-label>
+          <input readonly matInput [matDatepicker]="picker" placeholder="Date" [formControl]="dateControl" [matDatepickerFilter]="myFilter">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </td>
+      <td align="left">
+        <button mat-icon-button color="accent"
+        (click)="nextDay(1)"
+        [disabled]="rightDisabled | async">
+          <mat-icon>
+            chevron_right
+          </mat-icon>
+        </button>
+      </td>
+    </tr>
+  </table>
+  </div>

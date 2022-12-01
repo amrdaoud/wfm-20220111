@@ -1,0 +1,54 @@
+<form [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-dialog-container">
+    <mat-card-header>
+      <mat-card-title>
+        {{newOrUpdate}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="dialog-form-table">
+        <tr>
+          <td colspan="2">
+            <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingName | async" controlName="Name" label="Name" type="text"></app-input>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-form-field>
+              <mat-label>
+                Location
+              </mat-label>
+              <mat-select formControlName="LocationId">
+                <mat-option *ngFor="let location of locations | async" [value]="location.Id">{{location.Name}}</mat-option>
+              </mat-select>
+              <mat-spinner matSuffix color="primary" diameter=20 *ngIf="isLoadingLocations | async"></mat-spinner>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <app-input label="Arrive" type="time" [formGroup]="frm" controlName="ArriveTime"></app-input>
+          </td>
+          <td>
+            <app-input label="Depart" type="time" [formGroup]="frm" controlName="DepartTime"></app-input>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <mat-checkbox formControlName="IsIgnored">Ignore Time</mat-checkbox>
+          </td>
+        </tr>
+        <tr>
+          <app-input label="Description" type="text"   [formGroup]="frm" controlName="Description"></app-input>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button mat-dialog-close type="button">Cancel</button>
+      <button mat-raised-button color="primary">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>

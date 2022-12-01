@@ -1,0 +1,17 @@
+.forecast-container {
+position: relative;
+max-width: 100%;
+overflow: auto;
+}
+table {
+  white-space: nowrap;
+}
+table td,th {
+  border: 1px solid gray;
+  min-width: 25px;
+  min-height: 25px;
+
+}
+.clickable:hover{
+  cursor: pointer;
+}

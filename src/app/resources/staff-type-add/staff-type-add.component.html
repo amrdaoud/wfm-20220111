@@ -1,0 +1,25 @@
+<form [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-dialog-container">
+    <mat-card-header>
+      <mat-card-title>
+        New Staff Type
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div>
+         <app-input label="Name" [isAsync]="true" [isChecking]="isCheckingName | async" [formGroup]="frm" controlName="Name"></app-input>
+        </div>
+        <div>
+          <app-input label="Description" [formGroup]="frm" controlName="Description"></app-input>
+        </div>
+
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button mat-dialog-close type="button">Cancel</button>
+      <button mat-raised-button color="primary" [disabled]="(isCheckingName | async) || frm.invalid">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>

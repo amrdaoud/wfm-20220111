@@ -1,0 +1,10 @@
+<div [ngClass]="theme" style="height:100%">
+<div class="loading-overlay" *ngIf="(isLoadingDayOff | async) || (isLoadingGenerate | async) || (isLoadingInitial | async)
+|| (isLoadingSchedule | async)">
+  <div class="center">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>
+<app-main-nav [tenant]="tenant" [navItems]="navItems" [alias]="(user | async)?.Alias" [avatarUrl]="(user | async)?.AvatarImgUrl" (pretendChanged)="changePretend($event)" [roles]="(user | async)?.Roles"></app-main-nav>
+<router-outlet *ngIf="!(isLoadingInitial | async) && !(isLoadingSchedule | async)"></router-outlet>
+</div>

@@ -1,0 +1,25 @@
+<mat-card class="full-container">
+  <mat-card-header>
+    <mat-card-title>
+      Adherence Report
+    </mat-card-title>
+    <mat-card-subtitle>
+      Select Filters To Generate Report
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="height:10%">
+      <app-adherence-filter (filterSelected)="getData($event)"></app-adherence-filter>
+    </div>
+    <div style="height:90%">
+      <app-data-table
+    [data]="observableData"
+    [columnsDef]="columnsDef"
+    [isLoading]="isLoading"
+    >
+    </app-data-table>
+    </div>
+  </mat-card-content>
+</mat-card>
+<!-- <button mat-fab class="float-bottom-right" (click)="goToStaff()"><mat-icon>add</mat-icon></button> -->
+

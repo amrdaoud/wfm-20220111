@@ -1,0 +1,76 @@
+<form [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-dialog-container">
+    <mat-card-header>
+      <mat-card-title>
+        {{newOrUpdate}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <form formGroupName="ScheduleData">
+          <table class="form-table" width="100%">
+            <tr>
+              <td colspan="2">
+                <app-input [formGroup]="ScheduleDataForm" [isAsync]="true" [isChecking]="isCheckingName | async" controlName="Name" label="Name" type="text"></app-input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field>
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="picker" placeholder="Start date" formControlName="StartDate">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field>
+                  <mat-label>End Date</mat-label>
+                  <input matInput [matDatepicker]="picker2" placeholder="End date" formControlName="EndDate" [matDatepickerFilter]="myFilter">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </td>
+            </tr>
+      </table>
+      </form>
+      <form formGroupName="ShiftRuleData">
+        <table class="form-table">
+          <tr>
+            <td colspan="3" class="mat-body-2">
+              Latest Applied Rules
+            </td>
+          </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+              <mat-label>Start After(interval)</mat-label>
+              <input type="number" matInput formControlName="StartAfter">
+           </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <mat-label>End Before(interval)</mat-label>
+              <input type="number" matInput formControlName="EndBefore">
+           </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <mat-label>Breaks Distance(interval)</mat-label>
+              <input type="number" matInput formControlName="BreakBetween">
+           </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <small style="color: red" *ngIf="ScheduleDataForm.errors && ScheduleDataForm.errors['startEnd']">* Start Date is greater than End Date</small>
+      <small style="color: red" *ngIf="ScheduleDataForm.errors && ScheduleDataForm.errors['longRange'] && !ScheduleDataForm.errors['startEnd']">* Too many Days</small>
+      <button mat-button mat-dialog-close type="button">Cancel</button>
+      <button mat-raised-button color="primary" [disabled]="frm.disabled || frm.invalid">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>

@@ -1,0 +1,39 @@
+<form [formGroup]="frm" (ngSubmit)="onSubmit()">
+  <mat-card class="full-dialog-container">
+    <mat-card-header>
+      <mat-card-title>
+        {{newOrUpdate}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Please fill in the form
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="dialog-form-table">
+        <tr>
+          <td colspan="2">
+            <app-input [formGroup]="frm" [isAsync]="true" [isChecking]="isCheckingName | async" controlName="Name" label="Name" type="text"></app-input>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <app-input [formGroup]="frm" controlName="EarlyStart" label="Early Start" type="time"></app-input>
+          </td>
+          <td>
+            <app-input [formGroup]="frm" controlName="LateEnd" label="Late End" type="time"></app-input>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <app-input [formGroup]="frm" controlName="ShiftDuration" label="Duration(H)" type="number"></app-input>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <small style="color: red" *ngIf="frm.errors && frm.errors['durationError']">* Duration is greater than interval</small>
+      <button mat-button mat-dialog-close type="button">Cancel</button>
+      <button mat-raised-button color="primary">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+  </form>

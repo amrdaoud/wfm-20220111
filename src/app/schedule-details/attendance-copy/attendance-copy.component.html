@@ -1,0 +1,10 @@
+<mat-grid-list style="height: 50px" rowHeight="50" cols="3">
+<mat-grid-tile colspan="2">
+  {{data.element.Name}} on {{data.detail.Day | date}} Copied!
+</mat-grid-tile>
+<mat-grid-tile>
+  <button mat-raised-button color="primary" [disabled]="data.selected.length === 0" (click)="paste()">
+    <mat-icon>content_paste</mat-icon> Paste ({{data.selected.length}})</button>
+  <button mat-button (click)="close()"> Cancel</button>
+</mat-grid-tile>
+</mat-grid-list>

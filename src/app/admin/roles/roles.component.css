@@ -1,0 +1,12 @@
+.flex-container {
+  flex-direction: column;
+  display: flex;
+  max-height: 100%;
+  overflow-y: auto;
+}
+.group-card {
+  padding:0;
+  height: 280px;
+  width: 90%;
+  overflow-y: auto;
+}

@@ -1,0 +1,11 @@
+
+.full-card {
+  width: 90%;
+  height: 90%;
+  box-sizing: border-box;
+}
+.mat-display-1 {
+  font-weight: bold;
+  text-decoration: underline;
+}
+

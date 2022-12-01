@@ -1,0 +1,45 @@
+
+<div class="forecast-container">
+  <div class="loading-overlay" *ngIf="isLoading |async"></div>
+<table [cellSpacing]="0" [cellPadding]="5">
+  <thead >
+    <tr class="header-class">
+      <th rowspan="2">
+      </th>
+      <th colspan="4" *ngFor="let hour of hours" align="center" class="mat-body-strong">
+        {{hour}}
+      </th>
+    </tr>
+    <tr class="second-header">
+      <ng-container *ngFor="let hour of hours">
+        <th align="center" class="mat-body-strong">00</th>
+        <th align="center" class="mat-body-strong">15</th>
+        <th align="center" class="mat-body-strong">30</th>
+        <th align="center" class="mat-body-strong">45</th>
+      </ng-container>
+    </tr>
+    <tr *ngFor="let detail of transformedData">
+      <th align="left" class="mat-body-strong">
+        {{detail.DayoffWeek}}
+      </th>
+      <td *ngFor="let interval of detail.ForecastIntervals" align="center" class="mat-body"
+      [ngStyle]="{'background-color': getColor(interval.EmployeeCount)}">
+        <span *ngIf="!(isLoadingInterval | async)?.includes(interval.Id); else spinner" class="clickable" [mat-menu-trigger-for]="menu" [matTooltip]="detail.DayoffWeek + ' on ' + interval.TimeHour + ':' + interval.TimeQuarter">{{interval.EmployeeCount}}</span>
+        <ng-template #spinner>
+          <mat-spinner diameter="20"></mat-spinner>
+        </ng-template>
+        <mat-menu #menu=matMenu class="no-padding">
+          <mat-form-field (click)="$event.stopPropagation();">
+            <mat-label>{{detail.DayoffWeek + ' on ' + interval.TimeHour + ':' + interval.TimeQuarter}}</mat-label>
+            <input #repCount matInput type="number" [value]="interval.EmployeeCount" required min=1 [readonly]="isDisabled">
+            <button *ngIf="!isDisabled && !(isLoading | async)" mat-icon-button matSuffix color="primary" [disabled]="+repCount.value < 1"
+            (click)="editInterval(interval.Id, +repCount.value, detail.DayoffWeek)">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+          </mat-form-field>
+        </mat-menu>
+      </td>
+    </tr>
+  </thead>
+</table>
+</div>

@@ -1,0 +1,10 @@
+
+  <mat-form-field (click)="$event.stopPropagation()">
+    <input autocomplete="off" #activitySearch [formControl]="searchControl" matInput>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  <button mat-menu-item *ngFor="let item of filteredItems | async"
+  (click)="onSelect(item)">
+    <mat-icon *ngIf="item.Color" [ngStyle]="{'color':item.Color}">square</mat-icon>
+    {{item.Name}} <span *ngIf="item.ArriveTime">({{item.ArriveTime | date: 'HH:mm'}} - {{item.DepartTime | date: 'HH:mm'}})</span>
+  </button>

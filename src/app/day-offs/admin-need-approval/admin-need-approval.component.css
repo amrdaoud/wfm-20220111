@@ -1,0 +1,32 @@
+/* .data-table-container {
+  flex-direction: column;
+  display: flex;
+  max-height: 100%;
+}
+.table-container {
+  display: flex;
+  overflow: auto;
+  margin-bottom: 5px;
+} */
+.search-container {
+  display: flex;
+  justify-content: center;
+}
+.paginator-container {
+  display: flex;
+  justify-content: center;
+
+}
+.mat-form-field {
+  width: 50%;
+  min-width: 200px;
+}
+.mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+}
+.mat-icon {
+  vertical-align: middle;
+  text-align: left;
+}
+
+
