@@ -1,3 +1,4 @@
+import { TransportationGuard } from './../../app-models/resources';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -31,6 +32,28 @@ export class TransportationService {
     ).subscribe();
   }
   edit(id: number,model: Transportation): void {
+    this.httpLoading.next(true);
+    this.http.put<Transportation>(environment.apiUrl + `transportationroute/${id}`, model).pipe(
+      tap(x => {
+        let element = this.transportationSubject.value.find(l => l.Id === id);
+        if(element) {
+          const index = this.transportationSubject.value.indexOf(element);
+          this.transportationSubject.value[index] = x;
+          this.transportationSubject.next(this.transportationSubject.value);
+        }
+      }),
+      finalize(() => this.httpLoading.next(false))
+    ).subscribe();
+  }
+
+  addGuard(model: TransportationGuard): void {
+    this.httpLoading.next(true);
+    this.http.post<Transportation>(environment.apiUrl + 'transportationroute/AddTransportation', model).pipe(
+      tap(x => this.transportationSubject.next([...this.transportationSubject.value,x])),
+      finalize(() => this.httpLoading.next(false))
+    ).subscribe();
+  }
+  editGuard(id: number,model: TransportationGuard): void {
     this.httpLoading.next(true);
     this.http.put<Transportation>(environment.apiUrl + `transportationroute/${id}`, model).pipe(
       tap(x => {

@@ -27,6 +27,9 @@ import { TransportationAddComponent } from './transportation-add/transportation-
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HeadOfSectionListComponent } from './head-of-section-list/head-of-section-list.component';
 import { HeadOfSectionAddComponent } from './head-of-section-add/head-of-section-add.component';
+import { SublocationListComponent } from './sublocation-list/sublocation-list.component';
+import { SublocationAddComponent } from './sublocation-add/sublocation-add.component';
+import { TransportationGuardAddComponent } from './transportation-guard-add/transportation-guard-add.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import { HeadOfSectionAddComponent } from './head-of-section-add/head-of-section
     TransportationListComponent,
     TransportationAddComponent,
     HeadOfSectionListComponent,
-    HeadOfSectionAddComponent
+    HeadOfSectionAddComponent,
+    SublocationListComponent,
+    SublocationAddComponent,
+    TransportationGuardAddComponent
   ],
   imports: [
     CommonModule,

@@ -13,6 +13,18 @@ export const LocationColumns: ColumnDef[] = [
   {Name: 'Contact Phone', Property: 'ContactPhone', Pipe: null, IsSort: false}
 ];
 
+export interface SubLocation {
+  Id: number;
+  Name: string;
+  LocationName: string;
+  LocationId: number;
+}
+
+export const SublocationColumns: ColumnDef[] = [
+  {Name: 'Id', Property: 'Id', Pipe: DecimalPipe, IsSort: true},
+  {Name: 'Name', Property: 'Name', Pipe: null, IsSort: true},
+  {Name: 'Location Name', Property: 'LocationName', Pipe: null, IsSort: true}
+];
 
 export interface StaffMember {
   Id: number;
@@ -75,6 +87,11 @@ export interface Transportation {
   ArriveTime: Date;
   DepartTime: Date;
   IsIgnored: boolean;
+}
+export interface TransportationGuard {
+  SublocationId: number;
+  FromDate: Date;
+  ToDate: Date;
 }
 
 export const transportationColumns: ColumnDef[] = [

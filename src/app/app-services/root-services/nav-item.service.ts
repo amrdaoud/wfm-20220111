@@ -10,6 +10,7 @@ export class NavItemService {
   private navItems: NavItem[] = environment.tenant === 'Call Center' ? [
     {Name: 'Resources', Path: null, Icon: 'inventory', Roles:['Admin', 'Hos'], Items: [
       {Name: 'Locations', Path: '/resources/locations', Roles: ['Admin'], Icon: 'place', Items: null},
+      {Name: 'Sub-Locations', Path: '/resources/sublocations', Roles: ['Admin'], Icon: 'place', Items: null},
       {Name: 'Staff Members', Path: '/resources/staff-members', Roles:['Admin','Hos'], Icon: 'people', Items: [
         {Name: 'Create New', Path: '/resources/staff-members/add', Roles:['Admin'], Icon: 'add', Items:null},
         {Name: 'Staff Types', Path: '/resources/staff-types',Roles:['Admin'], Icon: 'category', Items:null},
