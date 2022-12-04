@@ -39,7 +39,7 @@ export class TransportationService {
         if(element) {
           const index = this.transportationSubject.value.indexOf(element);
           this.transportationSubject.value[index] = x;
-          this.transportationSubject.next(this.transportationSubject.value);
+          this.transportationSubject.next(this.transportationSubject.value)
         }
       }),
       finalize(() => this.httpLoading.next(false))
