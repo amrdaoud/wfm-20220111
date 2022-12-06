@@ -13,7 +13,7 @@
     [data]="observableData"
     [columnsDef]="columnsDef"
     [clickable]="true"
-    (rowClicked)="openTransportation($event)"
+    (rowClicked)="openTransportationGuard($event)"
     [isLoading]="isLoading"
     [haveFilter]="true"
     >
@@ -21,5 +21,5 @@
 
   </mat-card-content>
 </mat-card>
-<button mat-fab class="float-bottom-right" (click)="openTransportation()"><mat-icon>add</mat-icon></button>
+<button mat-fab class="float-bottom-right" (click)="openTransportationGuard()"><mat-icon>add</mat-icon></button>
 

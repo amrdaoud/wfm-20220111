@@ -48,14 +48,14 @@ export class TransportationService {
 
   addGuard(model: TransportationGuard): void {
     this.httpLoading.next(true);
-    this.http.post<Transportation>(environment.apiUrl + 'transportationroute/AddTransportation', model).pipe(
+    this.http.post<Transportation>(environment.apiUrl + 'transportationroute/guard', model).pipe(
       tap(x => this.transportationSubject.next([...this.transportationSubject.value,x])),
       finalize(() => this.httpLoading.next(false))
     ).subscribe();
   }
   editGuard(id: number,model: TransportationGuard): void {
     this.httpLoading.next(true);
-    this.http.put<Transportation>(environment.apiUrl + `transportationroute/${id}`, model).pipe(
+    this.http.put<Transportation>(environment.apiUrl + `transportationroute/guard/${id}`, model).pipe(
       tap(x => {
         let element = this.transportationSubject.value.find(l => l.Id === id);
         if(element) {
@@ -86,6 +86,15 @@ export class TransportationService {
       DepartTime: new FormControl(model? getTimeFromDate(model.DepartTime) : '', Validators.required),
       Description: new FormControl(model?.Description),
       IsIgnored: new FormControl(model ? model.IsIgnored : false)
+    });
+    return frm;
+  }
+  createFormGuard(model?: Transportation): FormGroup {
+    const frm = new FormGroup({
+      Id: new FormControl(model ? model.Id : 0),
+      // SublocationId: new FormControl(model?.LocationId, Validators.required),
+      ArriveTime: new FormControl(model? getTimeFromDate(model.ArriveTime) : '',Validators.required),
+      DepartTime: new FormControl(model? getTimeFromDate(model.DepartTime) : '', Validators.required)
     });
     return frm;
   }

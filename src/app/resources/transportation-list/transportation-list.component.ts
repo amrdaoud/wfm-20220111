@@ -1,3 +1,4 @@
+import { TransportationGuardAddComponent } from './../transportation-guard-add/transportation-guard-add.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -32,6 +33,19 @@ export class TransportationListComponent implements OnInit {
         }
         else {
           this.transportationService.add(result);
+        }
+      }
+    })
+  }
+  openTransportationGuard(model?: Transportation) {
+    this.dialog.open(TransportationGuardAddComponent, {panelClass: 'add-dialog', disableClose: true, data: model})
+    .afterClosed().subscribe(result => {
+      if(result) {
+        if(model) {
+          this.transportationService.editGuard(model.Id, result);
+        }
+        else {
+          this.transportationService.addGuard(result);
         }
       }
     })

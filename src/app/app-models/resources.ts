@@ -83,13 +83,15 @@ export interface Transportation {
   Name: string;
   Description: string;
   LocationId: number;
+  SubLocationId: number
   LocationName: string;
   ArriveTime: Date;
   DepartTime: Date;
   IsIgnored: boolean;
 }
 export interface TransportationGuard {
-  SublocationId: number;
+  Id: number;
+  //SublocationId: number;
   FromDate: Date;
   ToDate: Date;
 }
@@ -100,7 +102,8 @@ export const transportationColumns: ColumnDef[] = [
   {Name: 'Arrive Time', Property: 'ArriveTime', Pipe: 'TimePipe', IsSort: true, PipeArgs: 'HH:mm'},
   {Name: 'Depart Time', Property: 'DepartTime', Pipe: 'TimePipe', IsSort: true, PipeArgs: 'HH:mm'},
   {Name: 'Description', Property: 'Description', Pipe: null, IsSort: false},
-  {Name: 'Location', Property: 'LocationName', Pipe: null, IsSort: true}
+  //{Name: 'Sub-location', Property: 'LocationName', Pipe: null, IsSort: true}
+  //{Name: 'Location', Property: 'LocationName', Pipe: null, IsSort: true}
 ];
 
 export interface HeadOfSection {
