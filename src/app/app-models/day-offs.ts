@@ -22,6 +22,8 @@ export interface UserChoice {
   ScheduleId: number;
   AttendenceTypeName: string;
   AttendenceTypeId: number;
+  SublocationName: string;
+  SublocationId: number;
   ShiftName: string;
   ShiftId: number;
   DayOption1: DayOption;

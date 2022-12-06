@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable } from 'rxjs';
 import { AttendanceApprovalModel, AttendanceType, DayOption, UserChoice } from 'src/app/app-models/day-offs';
-import { Transportation } from 'src/app/app-models/resources';
+import { SubLocation, Transportation } from 'src/app/app-models/resources';
 import { weekDays } from 'src/app/app-models/shared/dictionaries';
 import { Shift } from 'src/app/app-models/ShiftsAndActivities';
 import { DayOffService } from 'src/app/app-services/day-offs/day-off.service';
@@ -25,6 +25,7 @@ export class AdminNeedApprovalComponent implements AfterViewInit {
   @Input() isLoading = new Observable<boolean>();
   @Input() shiftsObservable = new Observable<Transportation[]>();
   @Input() isLoadingShifts = new Observable<boolean>();
+  @Input() sublocationsObservable = new Observable<SubLocation[]>();
   @Input() attendanceTypesObservable = new Observable<AttendanceType[]>();
   @Input() isLoadingTypes = new Observable<boolean>();
   inEditItem!: UserChoice | null;
