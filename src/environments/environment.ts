@@ -6,8 +6,9 @@ export const environment = {
   production: false,
   // apiUrl: 'https://wfm.baservices.net/api/'
   apiUrl: 'https://localhost:44361/api/',
-  tenant: 'Call Center',
+  // tenant: 'Call Center',
   // tenant: 'Telemarketing'
+  tenant: 'Administration'
 };
 
 /*
