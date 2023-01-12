@@ -29,7 +29,8 @@ export interface Activity {
   CreateDate: Date,
   UpdatedBy: string,
   UpdateDate: Date,
-  DisableEdit: boolean
+  DisableEdit: boolean,
+  NeedBackup: boolean
 }
 
 export const activityColumns: ColumnDef[] = [

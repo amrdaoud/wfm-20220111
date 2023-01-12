@@ -30,3 +30,16 @@ export function getDaysBetween(start: Date, end: Date) : Date[] {
     }
     return dateArray;
 }
+export function getDaysBetweenString(start: Date, end: Date) : string[] {
+  let dateArray: string[] = [];
+  let currentDate =  new Date(start);
+  let maxDate = new Date(end)
+  while(currentDate <= maxDate) {
+    const cDate = new Date(currentDate);
+    const d = `${cDate.getDate().toString().padStart(2,'0')}/${(cDate.getMonth() + 1).toString().padStart(2,'0')}/${cDate.getFullYear()}`;
+    dateArray.push(d);
+    // dateArray.push(new Date(currentDate).toDateString());
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return dateArray;
+}

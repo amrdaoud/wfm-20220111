@@ -22,7 +22,7 @@
             {{schedule.StartDate | date:'EEE dd/MM/yyyy'}} - {{schedule.EndDate | date:'EEE dd/MM/yyyy'}}
           </div>
           <div overlayContents style="height:100%">
-            <mat-grid-list [cols]="(isHos | async) ? 2 : 1" rowHeight="fit" style="height:100%">
+            <!-- <mat-grid-list [cols]="(isHos | async) ? 2 : 1" rowHeight="fit" style="height:100%">
               <mat-grid-tile>
                 <button mat-raised-button class="growing" color='primary'
                 [routerLink]="['/schedule-details/daily-attendance/',schedule.Id]"
@@ -38,7 +38,7 @@
                 </button>
               </mat-grid-tile>
 
-            </mat-grid-list>
+            </mat-grid-list> -->
           </div>
         </app-selector-card>
       </mat-grid-tile>

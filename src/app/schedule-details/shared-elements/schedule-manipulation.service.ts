@@ -62,14 +62,14 @@ export class ScheduleManipulationService {
   //     }
   //   }
   // }
-  editScheduleDetailsPerStaff(selectedElements: ScheduleDetailManipulate[], activityId: number, staffId:number, scheduleId:number): Observable<DailyAttendance[]> {
+  editScheduleDetailsPerStaff(selectedElements: ScheduleDetailManipulate[], activityId: number, staffId:number, scheduleId:number, backupStaffId?: number): Observable<DailyAttendance[]> {
     return this.scheduleDetailService.manipulateScheduleDetailsPerStaff(
       {ActivityId: activityId, ScheduleDetailsManipulate: (selectedElements as ScheduleDetailManipulate[])},
       staffId,
       scheduleId
       );
   }
-  editScheduleDetailsPerDay(selectedElements: ScheduleDetailManipulate[], activityId: number, day:Date, scheduleId:number): Observable<DailyScheduleAttendanceByStaff[]> {
+  editScheduleDetailsPerDay(selectedElements: ScheduleDetailManipulate[], activityId: number, day:Date, scheduleId:number, backupStaffId?: number): Observable<DailyScheduleAttendanceByStaff[]> {
     return this.scheduleDetailService.manipulateScheduleDetailsPerDay(
       {ActivityId: activityId, ScheduleDetailsManipulate: (selectedElements as ScheduleDetailManipulate[])},
       day,

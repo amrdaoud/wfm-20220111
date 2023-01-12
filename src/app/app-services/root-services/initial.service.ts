@@ -30,10 +30,6 @@ isScheduleLoading = new BehaviorSubject<boolean>(false);
       })
     ).subscribe();
   }
-
-
-
-
   getCurrentSchedule(): void {
     this.isScheduleLoading.next(true);
     this.http.get<ActiveSchedule>(environment.apiUrl + 'ScheduleWithRule/current').pipe(

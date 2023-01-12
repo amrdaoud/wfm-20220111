@@ -1,4 +1,23 @@
 <div class="schedule-table">
+  <div *ngIf="autoSelect">
+    <form [formGroup]="frm" (ngSubmit)="selectIntervals()">
+    <mat-form-field>
+      <mat-select formControlName="StartInterval">
+        <mat-option *ngFor="let interval of intervalsObservable | async" [value]="interval.Id">
+          {{interval.TimeMap}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select formControlName="EndInterval">
+        <mat-option *ngFor="let interval of intervalsObservable | async" [value]="interval.Id">
+          {{interval.TimeMap}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-button [disabled]="frm.invalid || startInterval > endInterval">Select Intervals</button>
+  </form>
+  </div>
   <div style="min-height: 6px;">
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
   </div>
@@ -62,13 +81,13 @@ class="detail-float-bottom-right"
 <mat-menu #selectedDetailMenu="matMenu">
   <button mat-menu-item [mat-menu-trigger-for]=activityMenu >Change Activity</button>
   <button mat-menu-item (click)="deleteScheduleDetails()"><mat-icon color="warn">delete</mat-icon>Delete Activities</button>
-  <button mat-menu-item *ngIf="canCopyPaste" (click)="changeCopied()"><mat-icon>content_copy</mat-icon>Copy Activities</button>
+  <!-- <button mat-menu-item *ngIf="canCopyPaste" (click)="changeCopied()"><mat-icon>content_copy</mat-icon>Copy Activities</button> -->
   <button mat-menu-item *ngIf="canCopyPaste && (copiedActivities | async)?.length"
   [mat-menu-trigger-for]=copiedActivitiesMenu><mat-icon>content_paste</mat-icon>Paste Activities</button>
   <button mat-menu-item (click)="selectedElements = []; clearCopied()"><mat-icon>clear</mat-icon> Clear All</button>
 </mat-menu>
 <mat-menu #activityMenu="matMenu" class="no-height-menu" focusFirstItem>
-  <app-selectable-menu [items]="activities" (selected)="editScheduleDetails($event.Id)">
+  <app-selectable-menu [items]="activities" (selected)="editScheduleDetails($event)">
   </app-selectable-menu>
 </mat-menu>
 <mat-menu #copiedActivitiesMenu="matMenu" class="no-height-menu">

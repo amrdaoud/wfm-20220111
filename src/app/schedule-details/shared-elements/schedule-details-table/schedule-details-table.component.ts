@@ -1,8 +1,13 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {  tap, finalize } from 'rxjs';
+import { AttendanceType } from 'src/app/app-models/attendance-types';
+import { Transportation } from 'src/app/app-models/resources';
 import { DailyAttendance, ScheduleDetailManipulate } from 'src/app/app-models/schedule-details';
+import { Activity } from 'src/app/app-models/ShiftsAndActivities';
+import { AttendancePatternService } from 'src/app/app-services/attendance-pattern.service';
 import { ScheduleDetailService } from 'src/app/app-services/schedule-details/schedule-detail.service';
 
 import { ScheduleManipulationService } from '../schedule-manipulation.service';
@@ -23,6 +28,7 @@ onMouseup() {
 @Input() staffName!: string;
 @Input() dataSource = new MatTableDataSource<DailyAttendance>();
 @Input() haveAccess = false;
+@Input() autoSelect = false;
 canCopyPaste = false;
 selectedElements: ScheduleDetailManipulate[] = [];
 isLoading = this.manipulationService.isLoading;
@@ -34,6 +40,10 @@ isLoadingAddDetails = this.manipulationService.isLoadingAddDetails;
 isLoadingAttendance = this.manipulationService.isLoadingAttendance;
 isMouseDown = false;
 isAddingDetail = this.manipulationService.isAddingDetail;
+frm = new FormGroup({
+  StartInterval: new FormControl('', Validators.required),
+  EndInterval: new FormControl('', Validators.required)
+})
 intervalsObservable = this.scheduleDetailService.involvedIntervals.pipe(
   tap(x => {
     this.columns = ['Day','Adherence', ...x.map(z => z.Id.toString())]
@@ -42,7 +52,8 @@ intervalsObservable = this.scheduleDetailService.involvedIntervals.pipe(
 
   constructor(private router: Router,
               private manipulationService: ScheduleManipulationService,
-              private scheduleDetailService: ScheduleDetailService
+              private scheduleDetailService: ScheduleDetailService,
+              private patternService: AttendancePatternService
               ) {}
 
   ngOnInit(): void {
@@ -50,7 +61,12 @@ intervalsObservable = this.scheduleDetailService.involvedIntervals.pipe(
       this.selectedElements = [];
     });
   }
-
+  get startInterval(): number {
+    return this.frm.value.StartInterval;
+  }
+  get endInterval(): number {
+    return this.frm.value.EndInterval;
+  }
   undoAttendance(element: DailyAttendance, i: number) {
     if(!this.haveAccess) {
       return;
@@ -101,21 +117,24 @@ intervalsObservable = this.scheduleDetailService.involvedIntervals.pipe(
     }
     this.canCopyPaste = this.selectedElements.map(x => x.DailyAttendanceId).filter(this.onlyUnique).length === 1;
   }
-  editScheduleDetails(activityId: number) {
-    this.manipulationService.editScheduleDetailsPerStaff(this.selectedElements, activityId,this.staffId, this.scheduleId)
-    .pipe(
-      finalize(() =>  this.selectedElements = [])
-    )
-    .subscribe(result => {
-        if(result) {
-          result.forEach(element => {
-            var available = this.dataSource.data.find(x => x.Id == element.Id)!;
-            var index = this.dataSource.data.indexOf(available);
-            this.dataSource.data[index] = element
-          });
-          this.dataSource.data = [...this.dataSource.data];
-        }
-      })
+  editScheduleDetails(activity: Transportation | AttendanceType | Activity) {
+    if((activity as Activity).NeedBackup) {
+      this.patternService.getEligibleStaffMembers(this.selectedElements).subscribe(x => console.log(x))
+    }
+    // this.manipulationService.editScheduleDetailsPerStaff(this.selectedElements, activity.Id,this.staffId, this.scheduleId)
+    // .pipe(
+    //   finalize(() =>  this.selectedElements = [])
+    // )
+    // .subscribe(result => {
+    //     if(result) {
+    //       result.forEach(element => {
+    //         var available = this.dataSource.data.find(x => x.Id == element.Id)!;
+    //         var index = this.dataSource.data.indexOf(available);
+    //         this.dataSource.data[index] = element
+    //       });
+    //       this.dataSource.data = [...this.dataSource.data];
+    //     }
+    //   })
   }
   deleteScheduleDetails() {
     this.manipulationService.deleteScheduleDetailsPerStaff(this.selectedElements, this.staffId, this.scheduleId)
@@ -150,5 +169,16 @@ intervalsObservable = this.scheduleDetailService.involvedIntervals.pipe(
   }
   clearCopied() {
     this.manipulationService.changeCopiedActivities([]);
+  }
+  selectIntervals() {
+    this.selectedElements = [];
+    const dailyAttendancesId = this.dataSource.data.map(x => x.Id).filter(this.onlyUnique);
+    this.intervalsObservable.subscribe(x => {
+      dailyAttendancesId.forEach(id => {
+        x.filter(y => y.Id >= this.startInterval && y.Id <= this.endInterval).forEach(i => {
+          this.selectedElements.push({DailyAttendanceId: id, IntervalId: i.Id})
+        })
+      })
+    })
   }
 }

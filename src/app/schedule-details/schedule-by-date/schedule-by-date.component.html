@@ -103,7 +103,7 @@
               {{interval.TimeMap.substring(0,5)}}
             </th>
             <td mat-cell *matCellDef="let element; let i = index">
-              <app-interval-box
+              <!-- <app-interval-box
                 [scheduleDetail]="element.ScheduleDetails[interval.Id]"
                 [isLoading]="(isLoadingDetails | async)?.includes(element.ScheduleDetails[interval.Id]?.Id) ||
                 (isLoadingAddDetails | async)?.includes(element.AttendanceId + '-' + interval.Id) ||
@@ -112,6 +112,12 @@
                 [isMouseDown]="isMouseDown"
                 (mouseDown)="elementMouseDown(element,interval.Id, i)"
                 (mouseEnter)="elementHover(element,interval.Id, i)">
+            </app-interval-box> -->
+            <app-interval-box
+                [scheduleDetail]="element.ScheduleDetails[interval.Id]"
+                [isLoading]="(isLoadingDetails | async)?.includes(element.ScheduleDetails[interval.Id]?.Id) ||
+                (isLoadingAddDetails | async)?.includes(element.AttendanceId + '-' + interval.Id) ||
+                (isLoadingAttendance | async)?.includes(element.Id)">
             </app-interval-box>
             </td>
           </ng-container>
@@ -139,6 +145,6 @@ class="detail-float-bottom-right"
   <button mat-menu-item (click)="selectedElements = []"><mat-icon>clear</mat-icon> Clear</button>
 </mat-menu>
 <mat-menu #activityMenu="matMenu" class="no-height-menu" focusFirstItem>
-  <app-selectable-menu [items]="activities" (selected)="editScheduleDetails($event.Id)">
+  <app-selectable-menu [items]="activities" (selected)="editScheduleDetails($event)">
   </app-selectable-menu>
 </mat-menu>

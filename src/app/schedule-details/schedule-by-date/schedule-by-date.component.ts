@@ -11,6 +11,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { debounceTime, delay, distinctUntilChanged, merge, startWith, switchMap, tap, filter, finalize } from 'rxjs';
 import { DailyScheduleAttendanceByStaff, ScheduleByDay, ScheduleDetailManipulate } from 'src/app/app-models/schedule-details';
 import { ScheduleDetailService } from 'src/app/app-services/schedule-details/schedule-detail.service';
+import { AttendanceType } from 'src/app/app-models/attendance-types';
+import { Transportation } from 'src/app/app-models/resources';
 
 @Component({
   selector: 'app-schedule-by-date',
@@ -154,8 +156,9 @@ isAddingDetail = this.manipulationService.isAddingDetail;
       }
     }
   }
-  editScheduleDetails(activityId: number) {
-    this.manipulationService.editScheduleDetailsPerDay(this.selectedElements, activityId,this.day, this.scheduleId)
+  editScheduleDetails(activity: Transportation | AttendanceType | Activity) {
+    console.log(activity);
+    this.manipulationService.editScheduleDetailsPerDay(this.selectedElements, activity.Id,this.day, this.scheduleId)
     .pipe(
       finalize(() =>  this.selectedElements = [])
     )

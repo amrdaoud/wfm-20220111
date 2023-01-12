@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'swap-requests',  loadChildren: () => import('./swap-requests/swap-requests.module').then(m => m.SwapRequestsModule) , data:{Roles: ['User','Hos']}, canActivate: [AuthGuard]},
   { path:'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) , data:{Roles: ['SuperUser']}, canActivate: [AuthGuard]},
   { path: 'analysis', loadChildren: () => import('./analysis/analysis.module').then(m => m.AnalysisModule) , data:{Roles: ['SuperUser', 'Admin', 'Hos']}, canActivate: [AuthGuard]},
+  { path: 'pre-schedule', loadChildren: () => import('./attendance-pattern/attendance-pattern.module').then(m => m.AttendancePatternModule) , data:{Roles: ['SuperUser', 'Admin', 'Hos']}, canActivate: [AuthGuard]},
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '/404'  }
 ];

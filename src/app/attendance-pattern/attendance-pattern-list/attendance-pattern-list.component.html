@@ -1,0 +1,145 @@
+<!-- <button mat-stroked-button class="float-top-right" color="primary" [routerLink]="'/schedules'">
+    Back To Schedules
+</button> -->
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+          Admin Pre-Schedule
+        </mat-card-title>
+        <mat-card-subtitle>
+          All Needed Atendees Must Be Checked
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-grid-list cols="3" rowHeight="60">
+          <mat-grid-tile></mat-grid-tile>
+        </mat-grid-list>
+        <div class="data-table-container data-table">
+            <div class="search-container">
+              <mat-form-field>
+                <mat-label>
+                  Search
+                </mat-label>
+                <input matInput (keyup)="applyFilter($event)" [readonly]="(isLoading | async)">
+                <mat-icon matSuffix color="primary">search</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="loading-overlay" style="min-height: 6px;" *ngIf="isLoading |async">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+            <div class="table-container small-container mat-elevation-z8">
+              <form [formGroup]="frm" (ngSubmit)="submit()">
+                <table width=100% height=100% mat-table [dataSource]="dataSource" matSort>
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Included </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-icon color="primary" *ngIf="element.Id">check_circle</mat-icon>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef style="font-weight: bold;"> Included: {{getTotalIncluded()}} / {{getTotal()}} </td>
+                </ng-container>
+                    <ng-container matColumnDef="ScheduleName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Schedule </th>
+                        <td mat-cell *matCellDef="let element" >
+                          {{element.ScheduleName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="StaffMemberEmployeeId">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Syriatel Id </th>
+                      <td mat-cell *matCellDef="let element" >
+                        {{element.StaffMemberEmployeeId}}
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef>
+                        <button mat-raised-button routerLink="upload" style="width:100%" type="button" color="primary" [disabled]="editElementIndex > -1">
+                          <mat-icon>upload</mat-icon> Upload
+                        </button>
+                      </td>
+                  </ng-container>
+                    <ng-container matColumnDef="StaffMemberName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Staff Member </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{element.StaffMemberName}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="SublocationName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width:130px;">Sub-Location</th>
+                        <td mat-cell *matCellDef="let element; let i = index">
+                          <mat-form-field style="width: 90%;" *ngIf="i === editElementIndex; else sublocationName">
+                            <mat-select formControlName="SublocationId" style="text-align: center;">
+                              <mat-option *ngFor="let sublocation of sublocations | async" [value]="sublocation.Id">
+                                {{sublocation.Name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <ng-template #sublocationName>
+                            {{element.SublocationName}}
+                          </ng-template>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="TransportationName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift</th>
+                        <td mat-cell *matCellDef="let element; let i = index">
+                          <mat-form-field style="width: 90%;" *ngIf="i === editElementIndex; else transportationName">
+                            <mat-select formControlName="TransportationId" style="text-align: center;">
+                              <mat-option *ngFor="let transportation of transportations | async" [value]="transportation.Id">
+                                {{transportation.Name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <ng-template #transportationName>
+                            {{element.TransportationName}}
+                          </ng-template>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="DayOffs">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Day-Offs</th>
+                      <td mat-cell *matCellDef="let element; let i = index">
+                        <mat-form-field style="width: 90%;" *ngIf="i === editElementIndex; else transportationName" >
+                          <mat-select formControlName="DayOffs" style="text-align: center;" multiple>
+                            <mat-option *ngFor="let day of involvedDays" [value]="day">
+                              {{day}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <ng-template #transportationName>
+                          {{element.DayOffs}}
+                        </ng-template>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef>
+                        <button mat-button (click)="openSummary()" style="width:100%" type="button" color="accent" [disabled]="getTotalIncluded() === 0 || editElementIndex > -1" >
+                          <mat-icon>table</mat-icon> Show Summary
+                        </button>
+                      </td>
+                  </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width:70px;"></th>
+                        <td mat-cell *matCellDef="let element; let i = index">
+                          <button mat-icon-button type="button" color="primary" *ngIf="i !== editElementIndex" (click)="startEditing(i)">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button color="primary" *ngIf="i === editElementIndex" [disabled]="frm.invalid">
+                            <mat-icon>check</mat-icon>
+                          </button>
+                          <button mat-icon-button type="button" *ngIf="i === editElementIndex" (click)="editElementIndex = -1">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                          <button mat-icon-button type="reset" [disabled]="!element.Id" *ngIf="i === editElementIndex" (click)="exclude(element)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>
+                          <button mat-raised-button style="width:100%" color="accent" type="button" [disabled]="getTotalIncluded() === 0 || editElementIndex > -1" (click)="generate()">GENERATE</button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index; columns: columns;" [ngClass]="i === editElementIndex ? 'inEditRow' : ''" (dblclick)="startEditing(i)"></tr>
+                    <tr mat-footer-row *matFooterRowDef="columns; sticky: true"></tr>
+                </table>
+              </form>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+

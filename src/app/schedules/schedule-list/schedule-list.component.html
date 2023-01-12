@@ -32,7 +32,7 @@
           </div>
           <div overlayContents style="height:100%">
             <mat-grid-list cols="4" rowHeight="fit" style="height:100%">
-              <mat-grid-tile>
+              <!-- <mat-grid-tile>
                 <button mat-mini-fab class="growing" color='primary'
                 [routerLink]="['/schedule-details/daily-attendance/',schedule.Id]"
                 matTooltip="Daily Attendance">
@@ -52,21 +52,20 @@
                 matTooltip="Edit">
                   <mat-icon>edit</mat-icon>
                 </button>
-              </mat-grid-tile>
+              </mat-grid-tile> -->
               <mat-grid-tile>
-
                 <button mat-mini-fab class="growing" color=""
                 [mat-menu-trigger-for]="more"
                 matTooltip="more">
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #more="matMenu">
-                  <button mat-menu-item  [disabled]="schedule.IsPublish || !schedule.ForecastId || (isPublishing | async)"
+                  <!-- <button mat-menu-item  [disabled]="schedule.IsPublish || !schedule.ForecastId || (isPublishing | async)"
                     (click)="publish(schedule)"
                     matTooltip="Publish">
                     <mat-icon color="accent">share</mat-icon>
                     Publish
-                  </button>
+                  </button> -->
                   <button mat-menu-item
                     (click)="delete(schedule)"
                     matTooltip="Delete">

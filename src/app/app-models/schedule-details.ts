@@ -21,6 +21,7 @@ export interface ScheduleDetailManipulate {
 
 export interface ManipulateDetails {
     ActivityId: number;
+    BackupStaffId?: number;
     ScheduleDetailsManipulate: ScheduleDetailManipulate[];
 
 }

@@ -77,4 +77,11 @@ export interface UploadData {
   DayTwo: string;
   Valid: boolean;
 }
+export interface UploadDataGuard {
+  EmployeeId: string;
+  Sublocation: string;
+  Shift: string;
+  DayOffs: string;
+  Valid: boolean;
+}
 

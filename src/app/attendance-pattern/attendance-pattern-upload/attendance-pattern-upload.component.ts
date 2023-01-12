@@ -1,33 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { exhaustMap, filter } from 'rxjs';
-import { UploadData } from 'src/app/app-models/day-offs';
+import { getDaysBetweenString } from 'src/app/app-helpers/date-helper';
+import { UploadDataGuard } from 'src/app/app-models/day-offs';
 import { weekDays } from 'src/app/app-models/shared/dictionaries';
-import { DayOffService } from 'src/app/app-services/day-offs/day-off.service';
+import { AttendancePatternService } from 'src/app/app-services/attendance-pattern.service';
+import { ScheduleService } from 'src/app/app-services/schedules/schedule.service';
 import { ConfirmService } from 'src/app/app-services/shared/confirm.service';
 import { ErrorService } from 'src/app/app-services/shared/error.service';
 import { read, utils } from 'xlsx';
 
 @Component({
-  selector: 'app-upload',
-  templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.scss']
+  selector: 'app-attendance-pattern-upload',
+  templateUrl: './attendance-pattern-upload.component.html',
+  styleUrls: ['./attendance-pattern-upload.component.scss']
 })
-
-export class UploadComponent implements OnInit {
-  dataSource = new MatTableDataSource<UploadData>();
-  columns = ['EmployeeId', 'Transportation', 'Attendance', 'DayOne', 'DayTwo']
+export class AttendancePatternUploadComponent implements OnInit {
+  dataSource = new MatTableDataSource<UploadDataGuard>();
+  columns = ['EmployeeId','Sublocation', 'Transportation', 'DayOffs'];
   isValid = false;
-  isLoading = this.dayOffService.status();
-  constructor(private dayOffService: DayOffService,
+  isLoading = this.patternService.isLoading;
+  scheduleDays: string[] = [];
+  constructor(private patternService: AttendancePatternService,
               private confirm: ConfirmService,
               private snackBar: MatSnackBar,
-              private errorService: ErrorService) { }
+              private errorService: ErrorService,
+              private router: Router,
+              private scheduleService: ScheduleService) { }
 
   ngOnInit(): void {
+    this.scheduleService.getUnpublished().subscribe(x => {
+      this.scheduleDays = getDaysBetweenString(x.Schedule.StartDate, x.Schedule.EndDate);
+    })
   }
-
   uploadFile(event: any) {
     if(!event.target?.files || event.target?.files.length === 0) {
       return;
@@ -46,19 +53,16 @@ export class UploadComponent implements OnInit {
     fileReader.onload = (event: any) => {
       let binaryData = event.target.result;
       let workbook = read(binaryData, {type:'binary'});
-      let data = utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]) as Array<UploadData>;
+      let data = utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]) as Array<UploadDataGuard>;
       this.isValid = true;
       data.forEach(element => {
         if(
           !element.EmployeeId ||
           data.filter(x => x.EmployeeId === element.EmployeeId).length > 1 ||
-          !element.Attendance ||
-          !element.Transportation ||
-          !element.DayOne ||
-          !element.DayTwo ||
-          !weekDays.includes(element.DayOne) ||
-          !weekDays.includes(element.DayTwo) ||
-          element.DayOne.toLowerCase() == element.DayTwo.toLocaleLowerCase()) {
+          !element.Sublocation ||
+          !element.Shift ||
+          !element.DayOffs ||
+          !this.scheduleDays.find(x => element.DayOffs.split(',').includes(x))){
             element.Valid = false;
             this.isValid = false;
           }
@@ -70,17 +74,16 @@ export class UploadComponent implements OnInit {
       this.dataSource.data = data;
     }
   }
-
   submit() {
-    this.confirm.open('All Day-Offs & Break Types of this schedule will be replaced. Proceed?').pipe(
+    this.confirm.open('All daily attendance pattern of this schedule will be replaced. Proceed?').pipe(
       filter(x => x),
       exhaustMap(() => {
-        return this.dayOffService.uploadDayOffWithBreaks(this.dataSource.data);
+        return this.patternService.uplaodPatterns(this.dataSource.data);
       })
     ).subscribe(x => {
       if(x) {
         this.snackBar.open('Data Uploaded', 'Dismiss', {duration: 2000});
-
+        this.router.navigateByUrl('/pre-schedule')
       }
     })
   }

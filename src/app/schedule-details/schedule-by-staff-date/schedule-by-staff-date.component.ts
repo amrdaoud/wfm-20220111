@@ -1,11 +1,12 @@
 import { InitialService } from 'src/app/app-services/root-services/initial.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { tap, switchMap, Observable } from 'rxjs';
 import { DailyAttendance, ScheduleByStaff } from 'src/app/app-models/schedule-details';
 import { ScheduleDetailService } from 'src/app/app-services/schedule-details/schedule-detail.service';
 import { ScheduleManipulationService } from '../shared-elements/schedule-manipulation.service';
+import { ScheduleDetailsTableComponent } from '../shared-elements/schedule-details-table/schedule-details-table.component';
 
 @Component({
   selector: 'app-schedule-by-staff-date',
@@ -22,6 +23,7 @@ dataSource = new MatTableDataSource<DailyAttendance>();
 scheduleId!: number;
 staffId!: number;
 day!: Date;
+@ViewChild(ScheduleDetailsTableComponent) scheduleComponent!: ScheduleDetailsTableComponent;
   constructor(private scheduleDetailService: ScheduleDetailService,
               private route: ActivatedRoute,
               private router: Router,
@@ -63,6 +65,7 @@ adherenceByStaff!: Observable<number | null>;
     'by-staff-date',
     this.staffId,
     this.manipulationService.addDays(this.day, 1).toDateString()]);
+    this.scheduleComponent.selectedElements = [];
   }
   previousDay() {
     this.router.navigate(['/schedule-details/daily-attendance',
@@ -70,6 +73,7 @@ adherenceByStaff!: Observable<number | null>;
     'by-staff-date',
     this.staffId,
     this.manipulationService.addDays(this.day, -1).toDateString()]);
+    this.scheduleComponent.selectedElements = [];
   }
   goBack() {
     this.router.navigateByUrl(`/schedule-details/daily-attendance/${this.scheduleId}`);

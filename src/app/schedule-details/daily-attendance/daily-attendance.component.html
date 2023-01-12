@@ -127,7 +127,7 @@
     </button>
     <button mat-menu-item *ngIf="detail.HaveBackup" (click)="undoDailyAttendance(index,element,detail)"
     [disabled]="(isLoadingDetails | async)?.includes(getAttendanceTime(element.DailyAttendances,day)?.Id!)">Undo Changes</button>
-    <button mat-menu-item (click)="copyAttendance(element,detail)" [disabled]="copiedAttendance"><mat-icon>content_copy</mat-icon>Copy</button>
+    <!-- <button mat-menu-item (click)="copyAttendance(element,detail)" [disabled]="copiedAttendance"><mat-icon>content_copy</mat-icon>Copy</button> -->
   </ng-template>
 </mat-menu>
 <mat-menu #attendanceTypesMenu="matMenu" class="no-height-menu">
